@@ -8,77 +8,104 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #F7F5F0;
-      --surface: #FFFFFF;
-      --surface2: #F0EDE6;
-      --text: #1A1814;
-      --text2: #6B6760;
-      --text3: #A8A59F;
-      --border: rgba(26,24,20,0.10);
-      --border2: rgba(26,24,20,0.18);
-      --green: #1D7A56;
-      --green-bg: #E8F5EE;
-      --amber: #B06A00;
-      --amber-bg: #FEF3E2;
-      --red: #C0392B;
-      --red-bg: #FDECEA;
-      --blue: #1A5FA8;
-      --blue-bg: #E8F0FB;
+      --bg: #F7F5F0; --surface: #FFFFFF; --surface2: #F0EDE6;
+      --text: #1A1814; --text2: #6B6760; --text3: #A8A59F;
+      --border: rgba(26,24,20,0.10); --border2: rgba(26,24,20,0.18);
+      --green: #1D7A56; --green-bg: #E8F5EE;
+      --amber: #B06A00; --amber-bg: #FEF3E2;
+      --red: #C0392B; --red-bg: #FDECEA;
+      --blue: #1A5FA8; --blue-bg: #E8F0FB;
       --accent: #2C5F3F;
     }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      font-size: 15px;
-    }
+    .screen { display: none; }
+    .screen.active { display: flex; }
 
     #auth-screen {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      text-align: center;
+      min-height: 100vh; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 2rem; text-align: center;
     }
     .auth-icon { font-size: 48px; margin-bottom: 1.5rem; }
-    .auth-title { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--text); margin-bottom: 0.5rem; }
+    .auth-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 0.5rem; }
     .auth-sub { color: var(--text2); font-size: 14px; margin-bottom: 2rem; line-height: 1.6; }
     .google-btn {
       display: flex; align-items: center; gap: 10px;
       background: var(--surface); border: 1px solid var(--border2);
       border-radius: 12px; padding: 12px 24px;
       font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
-      color: var(--text); cursor: pointer; transition: background 0.15s;
+      color: var(--text); cursor: pointer;
     }
-    .google-btn:hover { background: var(--surface2); }
     .google-btn svg { width: 20px; height: 20px; }
 
-    #app-screen { display: none; max-width: 480px; margin: 0 auto; padding: 0 0 6rem; }
-
-    .app-header {
-      padding: 1.5rem 1.25rem 1rem;
-      display: flex; align-items: flex-start; justify-content: space-between;
+    #setup-screen {
+      min-height: 100vh; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 2rem; text-align: center;
     }
+    #setup-screen h2 { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 0.5rem; }
+    #setup-screen > p { color: var(--text2); font-size: 14px; margin-bottom: 2rem; line-height: 1.6; }
+    .setup-card {
+      background: var(--surface); border: 0.5px solid var(--border2);
+      border-radius: 16px; padding: 1.5rem; width: 100%; max-width: 340px; text-align: left; margin-bottom: 1rem;
+    }
+    .setup-card h3 { font-size: 15px; font-weight: 500; margin-bottom: 0.5rem; }
+    .setup-card p { font-size: 13px; color: var(--text2); margin-bottom: 1rem; }
+    .setup-input {
+      width: 100%; padding: 10px 12px; font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      border: 1px solid var(--border2); border-radius: 10px;
+      background: var(--surface); color: var(--text); outline: none; margin-bottom: 10px;
+    }
+    .setup-btn {
+      width: 100%; padding: 11px; font-size: 14px; font-weight: 500;
+      background: var(--text); color: var(--bg); border: none;
+      border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    }
+    .setup-btn.secondary {
+      background: transparent; color: var(--text2);
+      border: 1px solid var(--border2); margin-top: 8px;
+    }
+    .or-divider { color: var(--text3); font-size: 13px; margin: 1rem 0; }
+
+    #invite-screen {
+      min-height: 100vh; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 2rem; text-align: center;
+    }
+    #invite-screen h2 { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 0.5rem; }
+    #invite-screen > p { color: var(--text2); font-size: 14px; margin-bottom: 1.5rem; line-height: 1.6; }
+    .invite-card {
+      background: var(--surface); border: 0.5px solid var(--border2);
+      border-radius: 16px; padding: 1.25rem; width: 100%; max-width: 340px; text-align: left; margin-bottom: 1rem;
+    }
+    .invite-from { font-size: 13px; color: var(--text2); margin-bottom: 4px; }
+    .invite-name { font-size: 16px; font-weight: 500; }
+    .invite-actions { display: flex; gap: 8px; margin-top: 1rem; }
+    .accept-btn {
+      flex: 1; padding: 10px; font-size: 14px; font-weight: 500;
+      background: var(--text); color: var(--bg); border: none;
+      border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    }
+    .decline-btn {
+      flex: 1; padding: 10px; font-size: 14px;
+      background: transparent; color: var(--text2);
+      border: 1px solid var(--border2); border-radius: 10px;
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+    }
+
+    #app-screen { flex-direction: column; max-width: 480px; margin: 0 auto; padding: 0 0 6rem; min-height: 100vh; }
+    .app-header { padding: 1.5rem 1.25rem 1rem; display: flex; align-items: flex-start; justify-content: space-between; }
     .app-header-left h1 { font-family: 'DM Serif Display', serif; font-size: 28px; line-height: 1.1; }
     .app-header-left p { font-size: 12px; color: var(--text3); margin-top: 3px; }
-    .signout-btn {
-      background: none; border: none; cursor: pointer;
-      font-size: 12px; color: var(--text3); padding: 4px 8px;
-      border-radius: 6px; margin-top: 4px;
-    }
-    .signout-btn:hover { color: var(--text2); background: var(--surface2); }
+    .husstand-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--green-bg); color: var(--green); font-size: 11px; padding: 3px 9px; border-radius: 10px; margin-top: 4px; }
+    .icon-btn-sm { background: none; border: none; cursor: pointer; font-size: 18px; padding: 4px; border-radius: 6px; line-height: 1; margin-top: 4px; }
+    .icon-btn-sm:hover { background: var(--surface2); }
 
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 1.25rem 1.25rem; }
-    .stat-card {
-      background: var(--surface); border: 0.5px solid var(--border);
-      border-radius: 12px; padding: 0.75rem;
-    }
+    .stat-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 0.75rem; }
     .stat-num { font-size: 24px; font-weight: 500; line-height: 1; }
     .stat-num.warn { color: var(--amber); }
     .stat-num.danger { color: var(--red); }
@@ -94,18 +121,9 @@
     }
     .filter-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
 
-    .section-label {
-      font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--text3);
-      padding: 0.75rem 1.25rem 0.4rem;
-    }
-
+    .section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); padding: 0.75rem 1.25rem 0.4rem; }
     .items-wrap { padding: 0 1.25rem; display: flex; flex-direction: column; gap: 6px; }
-    .item {
-      background: var(--surface); border: 0.5px solid var(--border);
-      border-radius: 12px; padding: 0.85rem 1rem;
-      display: flex; align-items: center; gap: 12px;
-    }
+    .item { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; display: flex; align-items: center; gap: 12px; }
     .item.soon { border-left: 3px solid var(--amber); }
     .item.expired { border-left: 3px solid var(--red); background: #FFFAF9; }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
@@ -120,13 +138,8 @@
     .badge-ravare { background: var(--blue-bg); color: var(--blue); }
     .badge-ferdig { background: var(--green-bg); color: var(--green); }
     .badge-annet { background: var(--surface2); color: var(--text2); }
-    .delete-btn {
-      background: none; border: none; cursor: pointer;
-      color: var(--text3); font-size: 16px; line-height: 1;
-      padding: 2px 4px; border-radius: 4px;
-    }
+    .delete-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 16px; padding: 2px 4px; border-radius: 4px; }
     .delete-btn:hover { color: var(--red); background: var(--red-bg); }
-
     .empty-state { text-align: center; padding: 3rem 1.25rem; color: var(--text3); font-size: 13px; }
     .empty-state p:first-child { font-size: 28px; margin-bottom: 0.5rem; }
 
@@ -134,19 +147,15 @@
       position: fixed; bottom: 1.5rem; right: 1.5rem;
       width: 56px; height: 56px; border-radius: 50%;
       background: var(--text); color: var(--bg);
-      font-size: 26px; line-height: 1; border: none; cursor: pointer;
+      font-size: 26px; border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-      transition: transform 0.15s, background 0.15s;
-      z-index: 100;
+      transition: transform 0.15s; z-index: 100;
     }
     .fab:hover { transform: scale(1.05); }
-    .fab.open { background: var(--text2); transform: rotate(45deg); }
+    .fab.open { transform: rotate(45deg); }
 
-    .drawer-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.35);
-      opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 200;
-    }
+    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 200; }
     .drawer-overlay.visible { opacity: 1; pointer-events: all; }
     .drawer {
       position: fixed; bottom: 0; left: 0; right: 0;
@@ -165,62 +174,55 @@
       width: 100%; padding: 10px 12px; font-size: 14px;
       font-family: 'DM Sans', sans-serif;
       border: 1px solid var(--border2); border-radius: 10px;
-      background: var(--surface); color: var(--text);
-      outline: none; transition: border-color 0.15s;
+      background: var(--surface); color: var(--text); outline: none;
     }
     .field input:focus, .field select:focus { border-color: var(--accent); }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-    .holdbarhet-box {
-      font-size: 12px; color: var(--blue); background: var(--blue-bg);
-      border-radius: 8px; padding: 8px 10px; margin-bottom: 1rem;
-      display: none; line-height: 1.5;
-    }
+    .holdbarhet-box { font-size: 12px; color: var(--blue); background: var(--blue-bg); border-radius: 8px; padding: 8px 10px; margin-bottom: 1rem; display: none; line-height: 1.5; }
     .holdbarhet-box.visible { display: block; }
     .holdbarhet-box.loading { color: var(--text3); background: var(--surface2); }
     .holdbarhet-box.error { color: var(--red); background: var(--red-bg); }
-
     .months-row { display: flex; gap: 8px; align-items: flex-end; }
     .months-row .field { flex: 1; margin-bottom: 0; }
     .lookup-btn {
       padding: 10px 14px; font-size: 12px; font-weight: 500;
       border: 1px solid var(--border2); border-radius: 10px;
       background: var(--surface2); color: var(--text2);
-      cursor: pointer; white-space: nowrap; font-family: 'DM Sans', sans-serif;
-      height: 42px;
+      cursor: pointer; white-space: nowrap; font-family: 'DM Sans', sans-serif; height: 42px;
     }
-    .lookup-btn:hover { background: var(--bg); }
-
     .save-btn {
       width: 100%; padding: 13px; font-size: 15px; font-weight: 500;
       background: var(--text); color: var(--bg); border: none;
-      border-radius: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif;
-      margin-top: 0.5rem; transition: opacity 0.15s;
+      border-radius: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 0.5rem;
     }
-    .save-btn:hover { opacity: 0.85; }
     .save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .toast {
-      position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(20px);
-      background: var(--text); color: var(--bg); font-size: 13px;
-      padding: 8px 16px; border-radius: 20px; opacity: 0;
-      transition: all 0.2s; pointer-events: none; z-index: 400; white-space: nowrap;
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .settings-section { margin-bottom: 1.5rem; }
+    .settings-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
+    .member-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--border); }
+    .member-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--blue-bg); color: var(--blue); font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .member-info { flex: 1; min-width: 0; }
+    .member-name { font-size: 14px; font-weight: 500; }
+    .member-email { font-size: 12px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .member-tag { font-size: 10px; padding: 2px 7px; border-radius: 8px; background: var(--green-bg); color: var(--green); white-space: nowrap; }
+    .remove-member-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 14px; padding: 4px; }
+    .remove-member-btn:hover { color: var(--red); }
+    .invite-row { display: flex; gap: 8px; margin-top: 0.75rem; }
+    .invite-row input { flex: 1; padding: 9px 12px; font-size: 13px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border2); border-radius: 10px; background: var(--surface); color: var(--text); outline: none; }
+    .invite-row button { padding: 9px 14px; font-size: 13px; font-weight: 500; background: var(--text); color: var(--bg); border: none; border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+    .danger-btn { width: 100%; padding: 10px; font-size: 13px; color: var(--red); background: var(--red-bg); border: none; border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-bottom: 8px; }
 
-    .config-banner {
-      margin: 1rem 1.25rem; padding: 10px 14px;
-      background: var(--amber-bg); border-radius: 10px;
-      font-size: 12px; color: var(--amber); line-height: 1.5;
-    }
+    .toast { position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text); color: var(--bg); font-size: 13px; padding: 8px 16px; border-radius: 20px; opacity: 0; transition: all 0.2s; pointer-events: none; z-index: 400; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
 
-<div id="auth-screen">
+<!-- AUTH -->
+<div id="auth-screen" class="screen">
   <div class="auth-icon">🧊</div>
   <h1 class="auth-title">Fryseren</h1>
-  <p class="auth-sub">Hold styr på hva som er i fryseren.<br>Del med resten av familien i sanntid.</p>
+  <p class="auth-sub">Hold styr på hva som er i fryseren.<br>Del kun med familien din.</p>
   <button class="google-btn" onclick="signInWithGoogle()">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -232,32 +234,53 @@
   </button>
 </div>
 
-<div id="app-screen">
+<!-- SETUP -->
+<div id="setup-screen" class="screen">
+  <div class="auth-icon">🏠</div>
+  <h2>Velkommen!</h2>
+  <p>Du er ikke med i noen husstand enda.<br>Opprett en ny eller vent på invitasjon.</p>
+  <div class="setup-card">
+    <h3>Opprett ny husstand</h3>
+    <p>Du blir administrator og kan invitere andre.</p>
+    <input class="setup-input" id="husstand-navn" placeholder="F.eks. Familie Karlsen" />
+    <button class="setup-btn" onclick="opprettHusstand()">Opprett husstand</button>
+  </div>
+  <div class="or-divider">— eller —</div>
+  <p style="font-size:13px; color: var(--text2);">Har du fått en invitasjon? Den dukker opp automatisk.</p>
+  <button class="setup-btn secondary" onclick="sjekkInvitasjoner()">Sjekk invitasjoner</button>
+</div>
+
+<!-- INVITASJON -->
+<div id="invite-screen" class="screen">
+  <div class="auth-icon">✉️</div>
+  <h2>Du er invitert!</h2>
+  <p>Du har fått en invitasjon til å bli med i en husstand.</p>
+  <div class="invite-card">
+    <div class="invite-from">Invitasjon fra</div>
+    <div class="invite-name" id="invite-husstand-navn">–</div>
+    <div style="font-size:12px; color: var(--text2); margin-top: 4px;" id="invite-fra-epost">–</div>
+    <div class="invite-actions">
+      <button class="accept-btn" onclick="aksepterInvitasjon()">Bli med</button>
+      <button class="decline-btn" onclick="avvisInvitasjon()">Avvis</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-screen" class="screen">
   <div class="app-header">
     <div class="app-header-left">
       <h1>Fryseren 🧊</h1>
       <p id="header-date"></p>
+      <div class="husstand-badge">🏠 <span id="husstand-navn-display"></span></div>
     </div>
-    <button class="signout-btn" onclick="signOut()">Logg ut</button>
-  </div>
-
-  <div id="config-banner" class="config-banner" style="display:none">
-    ⚠️ Legg inn din Anthropic API-nøkkel i koden for å aktivere automatisk holdbarhetssøk.
+    <button class="icon-btn-sm" onclick="openSettings()">⚙️</button>
   </div>
 
   <div class="stats">
-    <div class="stat-card">
-      <div class="stat-num" id="stat-total">0</div>
-      <div class="stat-lbl">Totalt</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num warn" id="stat-soon">0</div>
-      <div class="stat-lbl">Snart utgått</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num danger" id="stat-expired">0</div>
-      <div class="stat-lbl">Utgått</div>
-    </div>
+    <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Totalt</div></div>
+    <div class="stat-card"><div class="stat-num warn" id="stat-soon">0</div><div class="stat-lbl">Snart utgått</div></div>
+    <div class="stat-card"><div class="stat-num danger" id="stat-expired">0</div><div class="stat-lbl">Utgått</div></div>
   </div>
 
   <div class="filters">
@@ -273,16 +296,15 @@
   <button class="fab" id="fab" onclick="toggleDrawer()">+</button>
 </div>
 
+<!-- LEGG TIL VARE -->
 <div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-handle"></div>
   <div class="drawer-title">Legg til vare</div>
-
   <div class="field">
     <label>Navn på vare</label>
     <input type="text" id="inp-name" placeholder="F.eks. kyllingkjøttdeig" oninput="onNameInput()" />
   </div>
-
   <div class="field-row">
     <div class="field">
       <label>Type</label>
@@ -300,12 +322,10 @@
       </select>
     </div>
   </div>
-
   <div class="field">
     <label>Dato lagt inn</label>
     <input type="date" id="inp-date" />
   </div>
-
   <div class="months-row">
     <div class="field">
       <label>Holdbarhet (måneder)</label>
@@ -313,9 +333,35 @@
     </div>
     <button class="lookup-btn" onclick="lookupHoldbarhet()">Slå opp</button>
   </div>
-
   <div class="holdbarhet-box" id="holdbarhet-box"></div>
   <button class="save-btn" id="save-btn" onclick="saveItem()">Legg til i fryseren</button>
+</div>
+
+<!-- INNSTILLINGER -->
+<div class="drawer-overlay" id="settings-overlay" onclick="closeSettings()"></div>
+<div class="drawer" id="settings-drawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-title">Innstillinger</div>
+
+  <div class="settings-section">
+    <div class="settings-label">Husstand</div>
+    <div style="font-size:15px; font-weight:500;" id="settings-husstand-navn">–</div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-label">Medlemmer</div>
+    <div id="members-list"></div>
+    <div class="invite-row">
+      <input type="email" id="invite-email" placeholder="epost@example.com" />
+      <button onclick="sendInvitasjon()">Inviter</button>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-label">Konto</div>
+    <button class="danger-btn" onclick="signOut()">Logg ut</button>
+    <button class="danger-btn" onclick="forlateHusstand()">Forlat husstand</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -324,7 +370,7 @@
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, onAuthStateChanged }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-  import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy }
+  import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, where, getDocs, updateDoc, arrayUnion, arrayRemove, getDoc }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
   const firebaseConfig = {
@@ -335,7 +381,6 @@
     messagingSenderId: "896027784662",
     appId: "1:896027784662:web:e2a676295a76983f31e077"
   };
-
   const ANTHROPIC_API_KEY = "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";
 
   const app = initializeApp(firebaseConfig);
@@ -344,41 +389,172 @@
   const provider = new GoogleAuthProvider();
 
   let currentUser = null;
-  let unsubscribe = null;
+  let currentHusstand = null;
+  let unsubItems = null;
+  let unsubHusstand = null;
   let currentFilter = 'alle';
   let allItems = [];
+  let pendingInvite = null;
   let nameTimer = null;
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
 
   window.signInWithGoogle = async () => {
     try { await signInWithPopup(auth, provider); }
-    catch(e) { console.error(e); }
+    catch(e) { console.error(e); showToast('Innlogging feilet'); }
   };
 
   window.signOut = async () => {
-    if (unsubscribe) unsubscribe();
+    if (unsubItems) unsubItems();
+    if (unsubHusstand) unsubHusstand();
     await fbSignOut(auth);
+    currentHusstand = null;
+    closeSettings();
+    showScreen('auth-screen');
   };
 
-  onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, async user => {
     currentUser = user;
-    if (user) {
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('app-screen').style.display = 'block';
-      if (!ANTHROPIC_API_KEY) document.getElementById('config-banner').style.display = 'block';
-      subscribeToItems();
-    } else {
-      document.getElementById('auth-screen').style.display = 'flex';
-      document.getElementById('app-screen').style.display = 'none';
-      if (unsubscribe) unsubscribe();
-    }
+    if (!user) { showScreen('auth-screen'); return; }
+    await sjekkBrukerStatus();
   });
 
-  function subscribeToItems() {
-    const q = query(collection(db, 'fryser'), orderBy('createdAt', 'desc'));
-    unsubscribe = onSnapshot(q, snap => {
-      allItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      render();
+  async function sjekkBrukerStatus() {
+    const q = query(collection(db, 'husstander'), where('members', 'array-contains', currentUser.email));
+    const snap = await getDocs(q);
+    if (!snap.empty) { startHusstand(snap.docs[0]); return; }
+
+    const invQ = query(collection(db, 'invitasjoner'),
+      where('toEmail', '==', currentUser.email),
+      where('status', '==', 'pending'));
+    const invSnap = await getDocs(invQ);
+    if (!invSnap.empty) {
+      const inv = invSnap.docs[0];
+      pendingInvite = { id: inv.id, ...inv.data() };
+      document.getElementById('invite-husstand-navn').textContent = pendingInvite.husstandNavn;
+      document.getElementById('invite-fra-epost').textContent = 'Fra: ' + pendingInvite.fromEmail;
+      showScreen('invite-screen');
+      return;
+    }
+    showScreen('setup-screen');
+  }
+
+  window.sjekkInvitasjoner = async () => {
+    await sjekkBrukerStatus();
+    if (document.getElementById('setup-screen').classList.contains('active')) showToast('Ingen invitasjoner funnet');
+  };
+
+  window.opprettHusstand = async () => {
+    const navn = document.getElementById('husstand-navn').value.trim();
+    if (!navn) { showToast('Gi husstanden et navn'); return; }
+    const ref = await addDoc(collection(db, 'husstander'), {
+      navn, owner: currentUser.email,
+      members: [currentUser.email],
+      memberNames: { [currentUser.email]: currentUser.displayName || currentUser.email },
+      createdAt: Date.now()
     });
+    const snap = await getDoc(ref);
+    startHusstand(snap);
+  };
+
+  window.aksepterInvitasjon = async () => {
+    if (!pendingInvite) return;
+    const husRef = doc(db, 'husstander', pendingInvite.husstandId);
+    await updateDoc(husRef, {
+      members: arrayUnion(currentUser.email),
+      [`memberNames.${currentUser.email}`]: currentUser.displayName || currentUser.email
+    });
+    await updateDoc(doc(db, 'invitasjoner', pendingInvite.id), { status: 'accepted' });
+    const snap = await getDoc(husRef);
+    startHusstand(snap);
+  };
+
+  window.avvisInvitasjon = async () => {
+    if (!pendingInvite) return;
+    await updateDoc(doc(db, 'invitasjoner', pendingInvite.id), { status: 'declined' });
+    pendingInvite = null;
+    showScreen('setup-screen');
+  };
+
+  function startHusstand(snap) {
+    currentHusstand = { id: snap.id, ...snap.data() };
+    document.getElementById('husstand-navn-display').textContent = currentHusstand.navn;
+    document.getElementById('settings-husstand-navn').textContent = currentHusstand.navn;
+    document.getElementById('header-date').textContent =
+      new Date().toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' });
+
+    if (unsubHusstand) unsubHusstand();
+    unsubHusstand = onSnapshot(doc(db, 'husstander', currentHusstand.id), d => {
+      if (d.exists()) { currentHusstand = { id: d.id, ...d.data() }; renderMembers(); }
+    });
+
+    if (unsubItems) unsubItems();
+    const q = query(collection(db, 'husstander', currentHusstand.id, 'items'), orderBy('createdAt', 'desc'));
+    unsubItems = onSnapshot(q, snap => {
+      allItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderItems();
+    });
+
+    showScreen('app-screen');
+  }
+
+  window.sendInvitasjon = async () => {
+    const email = document.getElementById('invite-email').value.trim().toLowerCase();
+    if (!email || !email.includes('@')) { showToast('Ugyldig e-post'); return; }
+    if (currentHusstand.members.includes(email)) { showToast('Allerede medlem'); return; }
+    await addDoc(collection(db, 'invitasjoner'), {
+      husstandId: currentHusstand.id,
+      husstandNavn: currentHusstand.navn,
+      fromEmail: currentUser.email,
+      toEmail: email,
+      status: 'pending',
+      createdAt: Date.now()
+    });
+    document.getElementById('invite-email').value = '';
+    showToast('Invitasjon sendt til ' + email);
+  };
+
+  window.fjernMedlem = async (email) => {
+    if (!confirm('Fjerne ' + email + ' fra husstanden?')) return;
+    await updateDoc(doc(db, 'husstander', currentHusstand.id), { members: arrayRemove(email) });
+    showToast('Fjernet');
+  };
+
+  window.forlateHusstand = async () => {
+    if (!confirm('Er du sikker på at du vil forlate husstanden?')) return;
+    await updateDoc(doc(db, 'husstander', currentHusstand.id), { members: arrayRemove(currentUser.email) });
+    if (unsubItems) unsubItems();
+    if (unsubHusstand) unsubHusstand();
+    currentHusstand = null;
+    closeSettings();
+    showScreen('setup-screen');
+  };
+
+  function renderMembers() {
+    if (!currentHusstand) return;
+    const list = document.getElementById('members-list');
+    const members = currentHusstand.members || [];
+    const names = currentHusstand.memberNames || {};
+    list.innerHTML = members.map(email => {
+      const name = names[email] || email;
+      const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+      const isOwner = email === currentHusstand.owner;
+      const isMe = email === currentUser.email;
+      return `<div class="member-row">
+        <div class="member-avatar">${initials}</div>
+        <div class="member-info">
+          <div class="member-name">${name}${isMe ? ' (deg)' : ''}</div>
+          <div class="member-email">${email}</div>
+        </div>
+        <span class="member-tag">${isOwner ? 'Admin' : 'Medlem'}</span>
+        ${!isMe && currentHusstand.owner === currentUser.email
+          ? `<button class="remove-member-btn" onclick="fjernMedlem('${email}')">✕</button>`
+          : ''}
+      </div>`;
+    }).join('');
   }
 
   window.saveItem = async () => {
@@ -391,7 +567,7 @@
     const btn = document.getElementById('save-btn');
     btn.disabled = true;
     try {
-      await addDoc(collection(db, 'fryser'), {
+      await addDoc(collection(db, 'husstander', currentHusstand.id, 'items'), {
         name, type, fryser, date, months,
         addedBy: currentUser.displayName || currentUser.email,
         createdAt: Date.now()
@@ -404,7 +580,7 @@
 
   window.removeItem = async (id, name) => {
     if (!confirm('Fjerne ' + name + ' fra fryseren?')) return;
-    await deleteDoc(doc(db, 'fryser', id));
+    await deleteDoc(doc(db, 'husstander', currentHusstand.id, 'items', id));
     showToast('Fjernet');
   };
 
@@ -414,13 +590,12 @@
     box.className = 'holdbarhet-box';
     const name = document.getElementById('inp-name').value.trim();
     if (name.length < 3 || !ANTHROPIC_API_KEY) return;
-    nameTimer = setTimeout(() => lookupHoldbarhet(true), 900);
+    nameTimer = setTimeout(() => lookupHoldbarhet(), 900);
   };
 
-  window.lookupHoldbarhet = async (auto = false) => {
+  window.lookupHoldbarhet = async () => {
     const name = document.getElementById('inp-name').value.trim();
-    if (!name) return;
-    if (!ANTHROPIC_API_KEY) { showToast('API-nøkkel mangler'); return; }
+    if (!name || !ANTHROPIC_API_KEY) return;
     const box = document.getElementById('holdbarhet-box');
     box.className = 'holdbarhet-box loading visible';
     box.textContent = 'Slår opp holdbarhet...';
@@ -452,16 +627,12 @@
     }
   };
 
-  window.setFilter = (f) => {
-    currentFilter = f;
-    document.querySelectorAll('.filter-pill').forEach(b => {
-      b.classList.toggle('active', b.dataset.filter === f);
-    });
-    render();
-  };
-
   document.querySelectorAll('.filter-pill').forEach(b => {
-    b.addEventListener('click', () => setFilter(b.dataset.filter));
+    b.addEventListener('click', () => {
+      currentFilter = b.dataset.filter;
+      document.querySelectorAll('.filter-pill').forEach(x => x.classList.toggle('active', x === b));
+      renderItems();
+    });
   });
 
   function dagerTil(dateStr, months) {
@@ -469,12 +640,10 @@
     ut.setMonth(ut.getMonth() + months);
     return Math.round((ut - new Date()) / 86400000);
   }
-
   function status(item) {
     const d = dagerTil(item.date, item.months);
     return d < 0 ? 'expired' : d <= 14 ? 'soon' : 'ok';
   }
-
   function formatDager(d) {
     if (d < 0) return 'Utgått – ' + Math.abs(d) + ' dager siden';
     if (d === 0) return 'Utgår i dag!';
@@ -486,18 +655,7 @@
   const TYPE_LABEL = { ravare: 'Råvare', ferdig: 'Ferdigmiddag', annet: 'Annet' };
   const TYPE_BADGE = { ravare: 'badge-ravare', ferdig: 'badge-ferdig', annet: 'badge-annet' };
 
-  function render() {
-    const now = new Date();
-    document.getElementById('header-date').textContent =
-      now.toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' });
-
-    const total = allItems.length;
-    const soon = allItems.filter(i => status(i) === 'soon').length;
-    const expired = allItems.filter(i => status(i) === 'expired').length;
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('stat-soon').textContent = soon;
-    document.getElementById('stat-expired').textContent = expired;
-
+  function renderItems() {
     let filtered = allItems.filter(i => {
       if (currentFilter === 'alle') return true;
       if (currentFilter === 'oppe') return i.fryser === 'oppe';
@@ -507,44 +665,42 @@
       if (currentFilter === 'utgatt') return status(i) === 'expired';
       return true;
     });
-
     filtered.sort((a, b) => dagerTil(a.date, a.months) - dagerTil(b.date, b.months));
 
-    const container = document.getElementById('items-container');
+    document.getElementById('stat-total').textContent = allItems.length;
+    document.getElementById('stat-soon').textContent = allItems.filter(i => status(i) === 'soon').length;
+    document.getElementById('stat-expired').textContent = allItems.filter(i => status(i) === 'expired').length;
 
+    const container = document.getElementById('items-container');
     if (filtered.length === 0) {
       container.innerHTML = '<div class="empty-state"><p>🧊</p><p>Ingenting her enda</p></div>';
       return;
     }
 
     const groups = [
-      { key: 'oppe', label: 'Fryseren oppe', items: filtered.filter(i => i.fryser === 'oppe') },
-      { key: 'nede', label: 'Fryseren nede', items: filtered.filter(i => i.fryser === 'nede') }
+      { label: 'Fryseren oppe', items: filtered.filter(i => i.fryser === 'oppe') },
+      { label: 'Fryseren nede', items: filtered.filter(i => i.fryser === 'nede') }
     ];
-
     let html = '';
     groups.forEach(g => {
       if (!g.items.length) return;
-      if (['alle','ravare','ferdig','utgatt'].includes(currentFilter)) {
-        html += `<div class="section-label">${g.label}</div>`;
-      }
+      if (['alle','ravare','ferdig','utgatt'].includes(currentFilter)) html += `<div class="section-label">${g.label}</div>`;
       html += '<div class="items-wrap">';
       g.items.forEach(item => {
         const d = dagerTil(item.date, item.months);
         const s = status(item);
-        const dotClass = s === 'ok' ? 'dot-ok' : s === 'soon' ? 'dot-soon' : 'dot-expired';
-        html += `
-          <div class="item ${s}">
-            <div class="status-dot ${dotClass}"></div>
-            <div class="item-body">
-              <div class="item-name">${item.name}</div>
-              <div class="item-sub">${formatDager(d)} · ${item.addedBy || ''}</div>
-            </div>
-            <div class="item-right">
-              <span class="type-badge ${TYPE_BADGE[item.type]}">${TYPE_LABEL[item.type]}</span>
-              <button class="delete-btn" onclick="removeItem('${item.id}','${item.name.replace(/'/g,"\\'")}')">✕</button>
-            </div>
-          </div>`;
+        const dot = s === 'ok' ? 'dot-ok' : s === 'soon' ? 'dot-soon' : 'dot-expired';
+        html += `<div class="item ${s}">
+          <div class="status-dot ${dot}"></div>
+          <div class="item-body">
+            <div class="item-name">${item.name}</div>
+            <div class="item-sub">${formatDager(d)} · ${item.addedBy || ''}</div>
+          </div>
+          <div class="item-right">
+            <span class="type-badge ${TYPE_BADGE[item.type]}">${TYPE_LABEL[item.type]}</span>
+            <button class="delete-btn" onclick="removeItem('${item.id}','${item.name.replace(/'/g,"\\'")}')">✕</button>
+          </div>
+        </div>`;
       });
       html += '</div>';
     });
@@ -552,10 +708,8 @@
   }
 
   window.toggleDrawer = () => {
-    const open = document.getElementById('drawer').classList.contains('open');
-    open ? closeDrawer() : openDrawer();
+    document.getElementById('drawer').classList.contains('open') ? closeDrawer() : openDrawer();
   };
-
   window.openDrawer = () => {
     document.getElementById('drawer').classList.add('open');
     document.getElementById('overlay').classList.add('visible');
@@ -564,7 +718,6 @@
     document.getElementById('holdbarhet-box').className = 'holdbarhet-box';
     setTimeout(() => document.getElementById('inp-name').focus(), 300);
   };
-
   window.closeDrawer = () => {
     document.getElementById('drawer').classList.remove('open');
     document.getElementById('overlay').classList.remove('visible');
@@ -572,6 +725,15 @@
     document.getElementById('inp-name').value = '';
     document.getElementById('inp-months').value = 3;
     document.getElementById('holdbarhet-box').className = 'holdbarhet-box';
+  };
+  window.openSettings = () => {
+    renderMembers();
+    document.getElementById('settings-drawer').classList.add('open');
+    document.getElementById('settings-overlay').classList.add('visible');
+  };
+  window.closeSettings = () => {
+    document.getElementById('settings-drawer').classList.remove('open');
+    document.getElementById('settings-overlay').classList.remove('visible');
   };
 
   function showToast(msg) {
