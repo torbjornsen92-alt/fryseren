@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fryseren</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #F7F5F0;
+      --surface: #FFFFFF;
+      --surface2: #F0EDE6;
+      --text: #1A1814;
+      --text2: #6B6760;
+      --text3: #A8A59F;
+      --border: rgba(26,24,20,0.10);
+      --border2: rgba(26,24,20,0.18);
+      --green: #1D7A56;
+      --green-bg: #E8F5EE;
+      --amber: #B06A00;
+      --amber-bg: #FEF3E2;
+      --red: #C0392B;
+      --red-bg: #FDECEA;
+      --blue: #1A5FA8;
+      --blue-bg: #E8F0FB;
+      --accent: #2C5F3F;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 15px;
+    }
+
+    /* AUTH SCREEN */
+    #auth-screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    .auth-icon { font-size: 48px; margin-bottom: 1.5rem; }
+    .auth-title { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--text); margin-bottom: 0.5rem; }
+    .auth-sub { color: var(--text2); font-size: 14px; margin-bottom: 2rem; line-height: 1.6; }
+    .google-btn {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 12px; padding: 12px 24px;
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+      color: var(--text); cursor: pointer; transition: background 0.15s;
+    }
+    .google-btn:hover { background: var(--surface2); }
+    .google-btn svg { width: 20px; height: 20px; }
+
+    /* APP LAYOUT */
+    #app-screen { display: none; max-width: 480px; margin: 0 auto; padding: 0 0 6rem; }
+
+    /* HEADER */
+    .app-header {
+      padding: 1.5rem 1.25rem 1rem;
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .app-header-left h1 { font-family: 'DM Serif Display', serif; font-size: 28px; line-height: 1.1; }
+    .app-header-left p { font-size: 12px; color: var(--text3); margin-top: 3px; }
+    .signout-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 12px; color: var(--text3); padding: 4px 8px;
+      border-radius: 6px; margin-top: 4px;
+    }
+    .signout-btn:hover { color: var(--text2); background: var(--surface2); }
+
+    /* STATS */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 1.25rem 1.25rem; }
+    .stat-card {
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 0.75rem;
+    }
+    .stat-num { font-size: 24px; font-weight: 500; line-height: 1; }
+    .stat-num.warn { color: var(--amber); }
+    .stat-num.danger { color: var(--red); }
+    .stat-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+    /* FILTERS */
+    .filters { display: flex; gap: 6px; padding: 0 1.25rem 1rem; overflow-x: auto; scrollbar-width: none; }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter-pill {
+      flex-shrink: 0; font-size: 12px; padding: 5px 12px;
+      border-radius: 20px; border: 0.5px solid var(--border2);
+      background: transparent; color: var(--text2); cursor: pointer;
+      font-family: 'DM Sans', sans-serif; transition: all 0.12s;
+    }
+    .filter-pill.active {
+      background: var(--text); color: var(--bg);
+      border-color: var(--text);
+    }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text3);
+      padding: 0.75rem 1.25rem 0.4rem;
+    }
+
+    /* ITEM CARDS */
+    .items-wrap { padding: 0 1.25rem; display: flex; flex-direction: column; gap: 6px; }
+    .item {
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 0.85rem 1rem;
+      display: flex; align-items: center; gap: 12px;
+      transition: border-color 0.15s;
+    }
+    .item.soon { border-left: 3px solid var(--amber); }
+    .item.expired { border-left: 3px solid var(--red); background: #FFFAF9; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-ok { background: var(--green); }
+    .dot-soon { background: var(--amber); }
+    .dot-expired { background: var(--red); }
+    .item-body { flex: 1; min-width: 0; }
+    .item-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .item-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+    .type-badge {
+      font-size: 10px; padding: 2px 7px; border-radius: 8px; white-space: nowrap;
+    }
+    .badge-ravare { background: var(--blue-bg); color: var(--blue); }
+    .badge-ferdig { background: var(--green-bg); color: var(--green); }
+    .badge-annet { background: var(--surface2); color: var(--text2); }
+    .delete-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--text3); font-size: 16px; line-height: 1;
+      padding: 2px 4px; border-radius: 4px;
+    }
+    .delete-btn:hover { color: var(--red); background: var(--red-bg); }
+
+    .empty-state { text-align: center; padding: 3rem 1.25rem; color: var(--text3); font-size: 13px; }
+    .empty-state p:first-child { font-size: 28px; margin-bottom: 0.5rem; }
+
+    /* FAB */
+    .fab {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--text); color: var(--bg);
+      font-size: 26px; line-height: 1; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      transition: transform 0.15s, background 0.15s;
+      z-index: 100;
+    }
+    .fab:hover { transform: scale(1.05); }
+    .fab.open { background: var(--text2); transform: rotate(45deg); }
+
+    /* DRAWER */
+    .drawer-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+      opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 200;
+    }
+    .drawer-overlay.visible { opacity: 1; pointer-events: all; }
+    .drawer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--surface); border-radius: 20px 20px 0 0;
+      padding: 1.5rem 1.25rem 2rem;
+      transform: translateY(100%); transition: transform 0.25s cubic-bezier(0.32,0.72,0,1);
+      z-index: 300; max-width: 480px; margin: 0 auto;
+    }
+    .drawer.open { transform: translateY(0); }
+    .drawer-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 1.25rem; }
+    .drawer-title { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 1.25rem; }
+
+    .field { margin-bottom: 1rem; }
+    .field label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 5px; }
+    .field input, .field select {
+      width: 100%; padding: 10px 12px; font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      border: 1px solid var(--border2); border-radius: 10px;
+      background: var(--surface); color: var(--text);
+      outline: none; transition: border-color 0.15s;
+    }
+    .field input:focus, .field select:focus { border-color: var(--accent); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .holdbarhet-box {
+      font-size: 12px; color: var(--blue); background: var(--blue-bg);
+      border-radius: 8px; padding: 8px 10px; margin-bottom: 1rem;
+      display: none; line-height: 1.5;
+    }
+    .holdbarhet-box.visible { display: block; }
+    .holdbarhet-box.loading { color: var(--text3); background: var(--surface2); }
+    .holdbarhet-box.error { color: var(--red); background: var(--red-bg); }
+
+    .months-row { display: flex; gap: 8px; align-items: flex-end; }
+    .months-row .field { flex: 1; margin-bottom: 0; }
+    .lookup-btn {
+      padding: 10px 14px; font-size: 12px; font-weight: 500;
+      border: 1px solid var(--border2); border-radius: 10px;
+      background: var(--surface2); color: var(--text2);
+      cursor: pointer; white-space: nowrap; font-family: 'DM Sans', sans-serif;
+      height: 42px;
+    }
+    .lookup-btn:hover { background: var(--bg); }
+
+    .save-btn {
+      width: 100%; padding: 13px; font-size: 15px; font-weight: 500;
+      background: var(--text); color: var(--bg); border: none;
+      border-radius: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+      margin-top: 0.5rem; transition: opacity 0.15s;
+    }
+    .save-btn:hover { opacity: 0.85; }
+    .save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--text); color: var(--bg); font-size: 13px;
+      padding: 8px 16px; border-radius: 20px; opacity: 0;
+      transition: all 0.2s; pointer-events: none; z-index: 400; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* CONFIG BANNER */
+    .config-banner {
+      margin: 1rem 1.25rem; padding: 10px 14px;
+      background: var(--amber-bg); border-radius: 10px;
+      font-size: 12px; color: var(--amber); line-height: 1.5;
+    }
+    .config-banner a { color: var(--amber); font-weight: 500; }
+  </style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-icon">🧊</div>
+  <h1 class="auth-title">Fryseren</h1>
+  <p class="auth-sub">Hold styr på hva som er i fryseren.<br>Del med resten av familien i sanntid.</p>
+  <button class="google-btn" onclick="signInWithGoogle()">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+    </svg>
+    Logg inn med Google
+  </button>
+</div>
+
+<!-- APP -->
+<div id="app-screen">
+  <div class="app-header">
+    <div class="app-header-left">
+      <h1>Fryseren 🧊</h1>
+      <p id="header-date"></p>
+    </div>
+    <button class="signout-btn" onclick="signOut()">Logg ut</button>
+  </div>
+
+  <div id="config-banner" class="config-banner" style="display:none">
+    ⚠️ Legg inn din <strong>Anthropic API-nøkkel</strong> i koden (variabelen <code>ANTHROPIC_API_KEY</code>) for å aktivere automatisk holdbarhetssøk.
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-total">0</div>
+      <div class="stat-lbl">Totalt</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num warn" id="stat-soon">0</div>
+      <div class="stat-lbl">Snart utgått</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num danger" id="stat-expired">0</div>
+      <div class="stat-lbl">Utgått</div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="filter-pill active" data-filter="alle">Alle</button>
+    <button class="filter-pill" data-filter="oppe">Frys oppe</button>
+    <button class="filter-pill" data-filter="nede">Frys nede</button>
+    <button class="filter-pill" data-filter="ravare">Råvarer</button>
+    <button class="filter-pill" data-filter="ferdig">Ferdigmiddager</button>
+    <button class="filter-pill" data-filter="utgatt">Utgått</button>
+  </div>
+
+  <div id="items-container"></div>
+
+  <button class="fab" id="fab" onclick="toggleDrawer()">+</button>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-title">Legg til vare</div>
+
+  <div class="field">
+    <label>Navn på vare</label>
+    <input type="text" id="inp-name" placeholder="F.eks. kyllingkjøttdeig" oninput="onNameInput()" />
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Type</label>
+      <select id="inp-type">
+        <option value="ravare">Råvare</option>
+        <option value="ferdig">Ferdigmiddag</option>
+        <option value="annet">Annet</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Hvilken fryser</label>
+      <select id="inp-fryser">
+        <option value="oppe">Oppe</option>
+        <option value="nede">Nede</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Dato lagt inn</label>
+    <input type="date" id="inp-date" />
+  </div>
+
+  <div class="months-row">
+    <div class="field">
+      <label>Holdbarhet (måneder)</label>
+      <input type="number" id="inp-months" value="3" min="1" max="24" />
+    </div>
+    <button class="lookup-btn" onclick="lookupHoldbarhet()">Slå opp</button>
+  </div>
+
+  <div class="holdbarhet-box" id="holdbarhet-box"></div>
+
+  <button class="save-btn" id="save-btn" onclick="saveItem()">Legg til i fryseren</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- FIREBASE -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, onAuthStateChanged }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy }
+    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  // ─── KONFIGURASJON ───────────────────────────────────────────────
+  // Erstatt med dine egne Firebase-verdier fra hjernedump-prosjektet
+  const firebaseConfig = {
+  apiKey: "AIzaSyCpLVZW02EacYpJbD1GJjtGKtmOtkBHtYE",
+  authDomain: "hjernedump.firebaseapp.com",
+  projectId: "hjernedump",
+  storageBucket: "hjernedump.firebasestorage.app",
+  messagingSenderId: "896027784662",
+  appId: "1:896027784662:web:e2a676295a76983f31e077",
+  measurementId: "G-XGZGQ8MGZ1"
+};
+
+  // Legg inn din Anthropic API-nøkkel for automatisk holdbarhetssøk
+  const ANTHROPIC_API_KEY = "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";
+  // ─────────────────────────────────────────────────────────────────
+
+  const app = initializeApp(FIREBASE_CONFIG);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+
+  let currentUser = null;
+  let unsubscribe = null;
+  let currentFilter = 'alle';
+  let allItems = [];
+  let nameTimer = null;
+
+  window.signInWithGoogle = async () => {
+    try { await signInWithPopup(auth, provider); }
+    catch(e) { console.error(e); }
+  };
+
+  window.signOut = async () => {
+    if (unsubscribe) unsubscribe();
+    await fbSignOut(auth);
+  };
+
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+    if (user) {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('app-screen').style.display = 'block';
+      if (!ANTHROPIC_API_KEY) document.getElementById('config-banner').style.display = 'block';
+      subscribeToItems();
+    } else {
+      document.getElementById('auth-screen').style.display = 'flex';
+      document.getElementById('app-screen').style.display = 'none';
+      if (unsubscribe) unsubscribe();
+    }
+  });
+
+  function subscribeToItems() {
+    const q = query(collection(db, 'fryser'), orderBy('createdAt', 'desc'));
+    unsubscribe = onSnapshot(q, snap => {
+      allItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      render();
+    });
+  }
+
+  window.saveItem = async () => {
+    const name = document.getElementById('inp-name').value.trim();
+    const type = document.getElementById('inp-type').value;
+    const fryser = document.getElementById('inp-fryser').value;
+    const date = document.getElementById('inp-date').value;
+    const months = parseInt(document.getElementById('inp-months').value);
+    if (!name || !date) { showToast('Fyll inn navn og dato'); return; }
+    const btn = document.getElementById('save-btn');
+    btn.disabled = true;
+    try {
+      await addDoc(collection(db, 'fryser'), {
+        name, type, fryser, date, months,
+        addedBy: currentUser.displayName || currentUser.email,
+        createdAt: Date.now()
+      });
+      closeDrawer();
+      showToast(name + ' lagt til ✓');
+    } catch(e) { showToast('Noe gikk galt'); }
+    btn.disabled = false;
+  };
+
+  window.removeItem = async (id, name) => {
+    if (!confirm('Fjerne ' + name + ' fra fryseren?')) return;
+    await deleteDoc(doc(db, 'fryser', id));
+    showToast('Fjernet');
+  };
+
+  window.onNameInput = () => {
+    clearTimeout(nameTimer);
+    const box = document.getElementById('holdbarhet-box');
+    box.className = 'holdbarhet-box';
+    const name = document.getElementById('inp-name').value.trim();
+    if (name.length < 3 || !ANTHROPIC_API_KEY) return;
+    nameTimer = setTimeout(() => lookupHoldbarhet(true), 900);
+  };
+
+  window.lookupHoldbarhet = async (auto = false) => {
+    const name = document.getElementById('inp-name').value.trim();
+    if (!name) return;
+    if (!ANTHROPIC_API_KEY) { showToast('API-nøkkel mangler – se banner øverst'); return; }
+    const box = document.getElementById('holdbarhet-box');
+    box.className = 'holdbarhet-box loading visible';
+    box.textContent = 'Slår opp holdbarhet...';
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': ANTHROPIC_API_KEY,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 150,
+          system: 'Du er matekspert. Svar KUN med JSON: {"måneder": tall, "forklaring": "kort norsk setning"}. Ingen markdown.',
+          messages: [{ role: 'user', content: 'Holdbarhet i hjemmefryser (-18°C) for: "' + name + '"' }]
+        })
+      });
+      const data = await res.json();
+      const parsed = JSON.parse(data.content[0].text);
+      const mnd = Math.round(parsed.måneder);
+      document.getElementById('inp-months').value = mnd;
+      box.className = 'holdbarhet-box visible';
+      box.textContent = parsed.forklaring + ' → ' + mnd + ' mnd anbefalt';
+    } catch(e) {
+      box.className = 'holdbarhet-box error visible';
+      box.textContent = 'Kunne ikke slå opp – sett måneder manuelt.';
+    }
+  };
+
+  window.setFilter = (f) => {
+    currentFilter = f;
+    document.querySelectorAll('.filter-pill').forEach(b => {
+      b.classList.toggle('active', b.dataset.filter === f);
+    });
+    render();
+  };
+
+  document.querySelectorAll('.filter-pill').forEach(b => {
+    b.addEventListener('click', () => setFilter(b.dataset.filter));
+  });
+
+  function dagerTil(dateStr, months) {
+    const ut = new Date(dateStr);
+    ut.setMonth(ut.getMonth() + months);
+    return Math.round((ut - new Date()) / 86400000);
+  }
+
+  function status(item) {
+    const d = dagerTil(item.date, item.months);
+    return d < 0 ? 'expired' : d <= 14 ? 'soon' : 'ok';
+  }
+
+  function formatDager(d) {
+    if (d < 0) return 'Utgått – ' + Math.abs(d) + ' dager siden';
+    if (d === 0) return 'Utgår i dag!';
+    if (d <= 14) return d + ' dager igjen';
+    const m = Math.floor(d / 30), r = d % 30;
+    return m > 0 ? (m + ' mnd' + (r > 0 ? ' ' + r + ' d' : '') + ' igjen') : d + ' dager igjen';
+  }
+
+  const TYPE_LABEL = { ravare: 'Råvare', ferdig: 'Ferdigmiddag', annet: 'Annet' };
+  const TYPE_BADGE = { ravare: 'badge-ravare', ferdig: 'badge-ferdig', annet: 'badge-annet' };
+
+  function render() {
+    const now = new Date();
+    document.getElementById('header-date').textContent =
+      now.toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' });
+
+    const total = allItems.length;
+    const soon = allItems.filter(i => status(i) === 'soon').length;
+    const expired = allItems.filter(i => status(i) === 'expired').length;
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-soon').textContent = soon;
+    document.getElementById('stat-expired').textContent = expired;
+
+    let filtered = allItems.filter(i => {
+      if (currentFilter === 'alle') return true;
+      if (currentFilter === 'oppe') return i.fryser === 'oppe';
+      if (currentFilter === 'nede') return i.fryser === 'nede';
+      if (currentFilter === 'ravare') return i.type === 'ravare';
+      if (currentFilter === 'ferdig') return i.type === 'ferdig';
+      if (currentFilter === 'utgatt') return status(i) === 'expired';
+      return true;
+    });
+
+    filtered.sort((a, b) => dagerTil(a.date, a.months) - dagerTil(b.date, b.months));
+
+    const container = document.getElementById('items-container');
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<div class="empty-state"><p>🧊</p><p>Ingenting her enda</p></div>';
+      return;
+    }
+
+    const groups = [
+      { key: 'oppe', label: 'Fryseren oppe', items: filtered.filter(i => i.fryser === 'oppe') },
+      { key: 'nede', label: 'Fryseren nede', items: filtered.filter(i => i.fryser === 'nede') }
+    ];
+
+    let html = '';
+    groups.forEach(g => {
+      if (!g.items.length) return;
+      if (currentFilter === 'alle' || currentFilter === 'ravare' || currentFilter === 'ferdig' || currentFilter === 'utgatt') {
+        html += `<div class="section-label">${g.label}</div>`;
+      }
+      html += '<div class="items-wrap">';
+      g.items.forEach(item => {
+        const d = dagerTil(item.date, item.months);
+        const s = status(item);
+        const dotClass = s === 'ok' ? 'dot-ok' : s === 'soon' ? 'dot-soon' : 'dot-expired';
+        html += `
+          <div class="item ${s}">
+            <div class="status-dot ${dotClass}"></div>
+            <div class="item-body">
+              <div class="item-name">${item.name}</div>
+              <div class="item-sub">${formatDager(d)} · ${item.addedBy || ''}</div>
+            </div>
+            <div class="item-right">
+              <span class="type-badge ${TYPE_BADGE[item.type]}">${TYPE_LABEL[item.type]}</span>
+              <button class="delete-btn" onclick="removeItem('${item.id}','${item.name.replace(/'/g,"\\'")}')">✕</button>
+            </div>
+          </div>`;
+      });
+      html += '</div>';
+    });
+    container.innerHTML = html;
+  }
+
+  window.toggleDrawer = () => {
+    const open = document.getElementById('drawer').classList.contains('open');
+    open ? closeDrawer() : openDrawer();
+  };
+
+  window.openDrawer = () => {
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('overlay').classList.add('visible');
+    document.getElementById('fab').classList.add('open');
+    document.getElementById('inp-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('holdbarhet-box').className = 'holdbarhet-box';
+    setTimeout(() => document.getElementById('inp-name').focus(), 300);
+  };
+
+  window.closeDrawer = () => {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('overlay').classList.remove('visible');
+    document.getElementById('fab').classList.remove('open');
+    document.getElementById('inp-name').value = '';
+    document.getElementById('inp-months').value = 3;
+    document.getElementById('holdbarhet-box').className = 'holdbarhet-box';
+  };
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>
