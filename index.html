@@ -37,7 +37,6 @@
       font-size: 15px;
     }
 
-    /* AUTH SCREEN */
     #auth-screen {
       min-height: 100vh;
       display: flex;
@@ -60,10 +59,8 @@
     .google-btn:hover { background: var(--surface2); }
     .google-btn svg { width: 20px; height: 20px; }
 
-    /* APP LAYOUT */
     #app-screen { display: none; max-width: 480px; margin: 0 auto; padding: 0 0 6rem; }
 
-    /* HEADER */
     .app-header {
       padding: 1.5rem 1.25rem 1rem;
       display: flex; align-items: flex-start; justify-content: space-between;
@@ -77,7 +74,6 @@
     }
     .signout-btn:hover { color: var(--text2); background: var(--surface2); }
 
-    /* STATS */
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 1.25rem 1.25rem; }
     .stat-card {
       background: var(--surface); border: 0.5px solid var(--border);
@@ -88,7 +84,6 @@
     .stat-num.danger { color: var(--red); }
     .stat-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; }
 
-    /* FILTERS */
     .filters { display: flex; gap: 6px; padding: 0 1.25rem 1rem; overflow-x: auto; scrollbar-width: none; }
     .filters::-webkit-scrollbar { display: none; }
     .filter-pill {
@@ -97,25 +92,19 @@
       background: transparent; color: var(--text2); cursor: pointer;
       font-family: 'DM Sans', sans-serif; transition: all 0.12s;
     }
-    .filter-pill.active {
-      background: var(--text); color: var(--bg);
-      border-color: var(--text);
-    }
+    .filter-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
 
-    /* SECTION LABEL */
     .section-label {
       font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
       text-transform: uppercase; color: var(--text3);
       padding: 0.75rem 1.25rem 0.4rem;
     }
 
-    /* ITEM CARDS */
     .items-wrap { padding: 0 1.25rem; display: flex; flex-direction: column; gap: 6px; }
     .item {
       background: var(--surface); border: 0.5px solid var(--border);
       border-radius: 12px; padding: 0.85rem 1rem;
       display: flex; align-items: center; gap: 12px;
-      transition: border-color 0.15s;
     }
     .item.soon { border-left: 3px solid var(--amber); }
     .item.expired { border-left: 3px solid var(--red); background: #FFFAF9; }
@@ -127,9 +116,7 @@
     .item-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .item-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
     .item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
-    .type-badge {
-      font-size: 10px; padding: 2px 7px; border-radius: 8px; white-space: nowrap;
-    }
+    .type-badge { font-size: 10px; padding: 2px 7px; border-radius: 8px; white-space: nowrap; }
     .badge-ravare { background: var(--blue-bg); color: var(--blue); }
     .badge-ferdig { background: var(--green-bg); color: var(--green); }
     .badge-annet { background: var(--surface2); color: var(--text2); }
@@ -143,7 +130,6 @@
     .empty-state { text-align: center; padding: 3rem 1.25rem; color: var(--text3); font-size: 13px; }
     .empty-state p:first-child { font-size: 28px; margin-bottom: 0.5rem; }
 
-    /* FAB */
     .fab {
       position: fixed; bottom: 1.5rem; right: 1.5rem;
       width: 56px; height: 56px; border-radius: 50%;
@@ -157,7 +143,6 @@
     .fab:hover { transform: scale(1.05); }
     .fab.open { background: var(--text2); transform: rotate(45deg); }
 
-    /* DRAWER */
     .drawer-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.35);
       opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 200;
@@ -215,7 +200,6 @@
     .save-btn:hover { opacity: 0.85; }
     .save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* TOAST */
     .toast {
       position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(20px);
       background: var(--text); color: var(--bg); font-size: 13px;
@@ -224,18 +208,15 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* CONFIG BANNER */
     .config-banner {
       margin: 1rem 1.25rem; padding: 10px 14px;
       background: var(--amber-bg); border-radius: 10px;
       font-size: 12px; color: var(--amber); line-height: 1.5;
     }
-    .config-banner a { color: var(--amber); font-weight: 500; }
   </style>
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
 <div id="auth-screen">
   <div class="auth-icon">🧊</div>
   <h1 class="auth-title">Fryseren</h1>
@@ -251,7 +232,6 @@
   </button>
 </div>
 
-<!-- APP -->
 <div id="app-screen">
   <div class="app-header">
     <div class="app-header-left">
@@ -262,7 +242,7 @@
   </div>
 
   <div id="config-banner" class="config-banner" style="display:none">
-    ⚠️ Legg inn din <strong>Anthropic API-nøkkel</strong> i koden (variabelen <code>ANTHROPIC_API_KEY</code>) for å aktivere automatisk holdbarhetssøk.
+    ⚠️ Legg inn din Anthropic API-nøkkel i koden for å aktivere automatisk holdbarhetssøk.
   </div>
 
   <div class="stats">
@@ -290,11 +270,9 @@
   </div>
 
   <div id="items-container"></div>
-
   <button class="fab" id="fab" onclick="toggleDrawer()">+</button>
 </div>
 
-<!-- DRAWER -->
 <div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
 <div class="drawer" id="drawer">
   <div class="drawer-handle"></div>
@@ -337,13 +315,11 @@
   </div>
 
   <div class="holdbarhet-box" id="holdbarhet-box"></div>
-
   <button class="save-btn" id="save-btn" onclick="saveItem()">Legg til i fryseren</button>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- FIREBASE -->
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, onAuthStateChanged }
@@ -351,23 +327,18 @@
   import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy }
     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-  // ─── KONFIGURASJON ───────────────────────────────────────────────
-  // Erstatt med dine egne Firebase-verdier fra hjernedump-prosjektet
   const firebaseConfig = {
-  apiKey: "AIzaSyCpLVZW02EacYpJbD1GJjtGKtmOtkBHtYE",
-  authDomain: "hjernedump.firebaseapp.com",
-  projectId: "hjernedump",
-  storageBucket: "hjernedump.firebasestorage.app",
-  messagingSenderId: "896027784662",
-  appId: "1:896027784662:web:e2a676295a76983f31e077",
-  measurementId: "G-XGZGQ8MGZ1"
-};
+    apiKey: "AIzaSyCpLVZW02EacYpJbD1GJjtGKtmOtkBHtYE",
+    authDomain: "hjernedump.firebaseapp.com",
+    projectId: "hjernedump",
+    storageBucket: "hjernedump.firebasestorage.app",
+    messagingSenderId: "896027784662",
+    appId: "1:896027784662:web:e2a676295a76983f31e077"
+  };
 
-  // Legg inn din Anthropic API-nøkkel for automatisk holdbarhetssøk
   const ANTHROPIC_API_KEY = "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";
-  // ─────────────────────────────────────────────────────────────────
 
-  const app = initializeApp(FIREBASE_CONFIG);
+  const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const provider = new GoogleAuthProvider();
@@ -427,7 +398,7 @@
       });
       closeDrawer();
       showToast(name + ' lagt til ✓');
-    } catch(e) { showToast('Noe gikk galt'); }
+    } catch(e) { showToast('Noe gikk galt'); console.error(e); }
     btn.disabled = false;
   };
 
@@ -449,7 +420,7 @@
   window.lookupHoldbarhet = async (auto = false) => {
     const name = document.getElementById('inp-name').value.trim();
     if (!name) return;
-    if (!ANTHROPIC_API_KEY) { showToast('API-nøkkel mangler – se banner øverst'); return; }
+    if (!ANTHROPIC_API_KEY) { showToast('API-nøkkel mangler'); return; }
     const box = document.getElementById('holdbarhet-box');
     box.className = 'holdbarhet-box loading visible';
     box.textContent = 'Slår opp holdbarhet...';
@@ -554,7 +525,7 @@
     let html = '';
     groups.forEach(g => {
       if (!g.items.length) return;
-      if (currentFilter === 'alle' || currentFilter === 'ravare' || currentFilter === 'ferdig' || currentFilter === 'utgatt') {
+      if (['alle','ravare','ferdig','utgatt'].includes(currentFilter)) {
         html += `<div class="section-label">${g.label}</div>`;
       }
       html += '<div class="items-wrap">';
