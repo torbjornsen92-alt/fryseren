@@ -1,244 +1,182 @@
 <!DOCTYPE html>
+
 <html lang="nb">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fryseren</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #F7F5F0; --surface: #FFFFFF; --surface2: #F0EDE6;
+      --bg: #F7F5F0; --surface: #FFFFFF; --surface2: #F0EDE6; --surface3: #E8E4DB;
       --text: #1A1814; --text2: #6B6760; --text3: #A8A59F;
-      --border: rgba(26,24,20,0.10); --border2: rgba(26,24,20,0.18);
+      --border: rgba(26,24,20,0.08); --border2: rgba(26,24,20,0.16);
       --green: #1D7A56; --green-bg: #E8F5EE;
       --amber: #B06A00; --amber-bg: #FEF3E2;
       --red: #C0392B; --red-bg: #FDECEA;
       --blue: #1A5FA8; --blue-bg: #E8F0FB;
       --accent: #2C5F3F;
+      --radius: 14px; --radius-sm: 8px;
     }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; }
-
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; -webkit-tap-highlight-color: transparent; }
     .screen { display: none; }
     .screen.active { display: flex; }
 
-    #auth-screen {
-      min-height: 100vh; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 2rem; text-align: center;
-    }
-    .auth-icon { font-size: 48px; margin-bottom: 1.5rem; }
-    .auth-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 0.5rem; }
-    .auth-sub { color: var(--text2); font-size: 14px; margin-bottom: 2rem; line-height: 1.6; }
-    .google-btn {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--surface); border: 1px solid var(--border2);
-      border-radius: 12px; padding: 12px 24px;
-      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
-      color: var(--text); cursor: pointer;
-    }
-    .google-btn svg { width: 20px; height: 20px; }
+```
+#auth-screen { min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+.auth-icon { font-size: 52px; margin-bottom: 1.5rem; }
+.auth-title { font-family: 'DM Serif Display', serif; font-size: 34px; margin-bottom: 0.5rem; }
+.auth-sub { color: var(--text2); font-size: 14px; margin-bottom: 2.5rem; line-height: 1.7; }
+.google-btn { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius); padding: 13px 24px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: var(--text); cursor: pointer; }
+.google-btn svg { width: 20px; height: 20px; }
 
-    #setup-screen {
-      min-height: 100vh; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 2rem; text-align: center;
-    }
-    #setup-screen h2 { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 0.5rem; }
-    #setup-screen > p { color: var(--text2); font-size: 14px; margin-bottom: 2rem; line-height: 1.6; }
-    .setup-card {
-      background: var(--surface); border: 0.5px solid var(--border2);
-      border-radius: 16px; padding: 1.5rem; width: 100%; max-width: 340px; text-align: left; margin-bottom: 1rem;
-    }
-    .setup-card h3 { font-size: 15px; font-weight: 500; margin-bottom: 0.5rem; }
-    .setup-card p { font-size: 13px; color: var(--text2); margin-bottom: 1rem; }
-    .setup-input {
-      width: 100%; padding: 10px 12px; font-size: 14px;
-      font-family: 'DM Sans', sans-serif;
-      border: 1px solid var(--border2); border-radius: 10px;
-      background: var(--surface); color: var(--text); outline: none; margin-bottom: 10px;
-    }
-    .setup-btn {
-      width: 100%; padding: 11px; font-size: 14px; font-weight: 500;
-      background: var(--text); color: var(--bg); border: none;
-      border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif;
-    }
-    .setup-btn.secondary {
-      background: transparent; color: var(--text2);
-      border: 1px solid var(--border2); margin-top: 8px;
-    }
-    .or-divider { color: var(--text3); font-size: 13px; margin: 1rem 0; }
+#setup-screen { min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+#setup-screen h2 { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 0.5rem; }
+#setup-screen > p { color: var(--text2); font-size: 14px; margin-bottom: 2rem; line-height: 1.6; }
+.setup-card { background: var(--surface); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 1.5rem; width: 100%; max-width: 340px; text-align: left; margin-bottom: 1rem; }
+.setup-card h3 { font-size: 15px; font-weight: 500; margin-bottom: 0.4rem; }
+.setup-card p { font-size: 13px; color: var(--text2); margin-bottom: 1rem; }
+.setup-input { width: 100%; padding: 10px 12px; font-size: 14px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); outline: none; margin-bottom: 10px; }
+.setup-btn { width: 100%; padding: 11px; font-size: 14px; font-weight: 500; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.setup-btn.secondary { background: transparent; color: var(--text2); border: 1px solid var(--border2); margin-top: 8px; }
+.or-divider { color: var(--text3); font-size: 13px; margin: 1rem 0; }
 
-    #invite-screen {
-      min-height: 100vh; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 2rem; text-align: center;
-    }
-    #invite-screen h2 { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 0.5rem; }
-    #invite-screen > p { color: var(--text2); font-size: 14px; margin-bottom: 1.5rem; line-height: 1.6; }
-    .invite-card {
-      background: var(--surface); border: 0.5px solid var(--border2);
-      border-radius: 16px; padding: 1.25rem; width: 100%; max-width: 340px; text-align: left; margin-bottom: 1rem;
-    }
-    .invite-from { font-size: 13px; color: var(--text2); margin-bottom: 4px; }
-    .invite-name { font-size: 16px; font-weight: 500; }
-    .invite-actions { display: flex; gap: 8px; margin-top: 1rem; }
-    .accept-btn {
-      flex: 1; padding: 10px; font-size: 14px; font-weight: 500;
-      background: var(--text); color: var(--bg); border: none;
-      border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif;
-    }
-    .decline-btn {
-      flex: 1; padding: 10px; font-size: 14px;
-      background: transparent; color: var(--text2);
-      border: 1px solid var(--border2); border-radius: 10px;
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-    }
+#invite-screen { min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+#invite-screen h2 { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 0.5rem; }
+#invite-screen > p { color: var(--text2); font-size: 14px; margin-bottom: 1.5rem; line-height: 1.6; }
+.invite-card { background: var(--surface); border: 0.5px solid var(--border2); border-radius: var(--radius); padding: 1.25rem; width: 100%; max-width: 340px; text-align: left; margin-bottom: 1rem; }
+.invite-from { font-size: 13px; color: var(--text2); margin-bottom: 4px; }
+.invite-name { font-size: 16px; font-weight: 500; }
+.invite-actions { display: flex; gap: 8px; margin-top: 1rem; }
+.accept-btn { flex: 1; padding: 10px; font-size: 14px; font-weight: 500; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.decline-btn { flex: 1; padding: 10px; font-size: 14px; background: transparent; color: var(--text2); border: 1px solid var(--border2); border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans', sans-serif; }
 
-    #app-screen { flex-direction: column; max-width: 480px; margin: 0 auto; padding: 0 0 6rem; min-height: 100vh; }
-    .app-header { padding: 1.5rem 1.25rem 1rem; display: flex; align-items: flex-start; justify-content: space-between; }
-    .app-header-left h1 { font-family: 'DM Serif Display', serif; font-size: 28px; line-height: 1.1; }
-    .app-header-left p { font-size: 12px; color: var(--text3); margin-top: 3px; }
-    .husstand-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--green-bg); color: var(--green); font-size: 11px; padding: 3px 9px; border-radius: 10px; margin-top: 4px; }
-    .icon-btn-sm { background: none; border: none; cursor: pointer; font-size: 18px; padding: 4px; border-radius: 6px; line-height: 1; margin-top: 4px; }
-    .icon-btn-sm:hover { background: var(--surface2); }
+#app-screen { flex-direction: column; max-width: 480px; margin: 0 auto; padding: 0 0 7rem; min-height: 100vh; }
+.app-header { padding: 1.5rem 1.25rem 0.75rem; display: flex; align-items: flex-start; justify-content: space-between; }
+.app-header-left h1 { font-family: 'DM Serif Display', serif; font-size: 30px; line-height: 1.1; }
+.app-header-left p { font-size: 12px; color: var(--text3); margin-top: 3px; }
+.husstand-badge { display: inline-flex; align-items: center; gap: 5px; background: var(--green-bg); color: var(--green); font-size: 11px; padding: 3px 9px; border-radius: 20px; margin-top: 5px; font-weight: 500; }
+.icon-btn-sm { background: none; border: none; cursor: pointer; font-size: 20px; padding: 4px; border-radius: 8px; line-height: 1; margin-top: 4px; }
 
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 1.25rem 1.25rem; }
-    .stat-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 0.75rem; }
-    .stat-num { font-size: 24px; font-weight: 500; line-height: 1; }
-    .stat-num.warn { color: var(--amber); }
-    .stat-num.danger { color: var(--red); }
-    .stat-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 1rem 1.25rem; }
+.stat-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 0.85rem; }
+.stat-num { font-size: 26px; font-weight: 400; line-height: 1; font-family: 'DM Serif Display', serif; }
+.stat-num.warn { color: var(--amber); }
+.stat-num.danger { color: var(--red); }
+.stat-lbl { font-size: 11px; color: var(--text3); margin-top: 4px; }
 
-    .filters { display: flex; gap: 6px; padding: 0 1.25rem 1rem; overflow-x: auto; scrollbar-width: none; }
-    .filters::-webkit-scrollbar { display: none; }
-    .filter-pill {
-      flex-shrink: 0; font-size: 12px; padding: 5px 12px;
-      border-radius: 20px; border: 0.5px solid var(--border2);
-      background: transparent; color: var(--text2); cursor: pointer;
-      font-family: 'DM Sans', sans-serif; transition: all 0.12s;
-    }
-    .filter-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+.filters-wrap { padding: 0 1.25rem 0.75rem; }
+.filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.filters::-webkit-scrollbar { display: none; }
+.filter-pill { flex-shrink: 0; font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.12s; white-space: nowrap; }
+.filter-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
 
-    .section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); padding: 0.75rem 1.25rem 0.4rem; }
-    .items-wrap { padding: 0 1.25rem; display: flex; flex-direction: column; gap: 6px; }
-    .item { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 0.85rem 1rem; display: flex; align-items: center; gap: 12px; }
-    .item.soon { border-left: 3px solid var(--amber); }
-    .item.expired { border-left: 3px solid var(--red); background: #FFFAF9; }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .dot-ok { background: var(--green); }
-    .dot-soon { background: var(--amber); }
-    .dot-expired { background: var(--red); }
-    .item-body { flex: 1; min-width: 0; }
-    .item-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .item-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
-    .item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
-    .type-badge { font-size: 10px; padding: 2px 7px; border-radius: 8px; white-space: nowrap; }
-    .badge-ravare { background: var(--blue-bg); color: var(--blue); }
-    .badge-ferdig { background: var(--green-bg); color: var(--green); }
-    .badge-annet { background: var(--surface2); color: var(--text2); }
-    .delete-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 16px; padding: 2px 4px; border-radius: 4px; }
-    .delete-btn:hover { color: var(--red); background: var(--red-bg); }
-    .empty-state { text-align: center; padding: 3rem 1.25rem; color: var(--text3); font-size: 13px; }
-    .empty-state p:first-child { font-size: 28px; margin-bottom: 0.5rem; }
+.section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); padding: 0.75rem 1.25rem 0.4rem; }
+.items-wrap { padding: 0 1.25rem; display: flex; flex-direction: column; gap: 6px; }
 
-    .fab {
-      position: fixed; bottom: 1.5rem; right: 1.5rem;
-      width: 56px; height: 56px; border-radius: 50%;
-      background: var(--text); color: var(--bg);
-      font-size: 26px; border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-      transition: transform 0.15s; z-index: 100;
-    }
-    .fab:hover { transform: scale(1.05); }
-    .fab.open { transform: rotate(45deg); }
+.item { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 0.9rem 1rem; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.item.soon { border-left: 3px solid var(--amber); }
+.item.expired { border-left: 3px solid var(--red); background: #FFFAF9; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-ok { background: var(--green); }
+.dot-soon { background: var(--amber); }
+.dot-expired { background: var(--red); }
+.item-body { flex: 1; min-width: 0; }
+.item-name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+.cat-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; white-space: nowrap; font-weight: 500; }
+.qty-stepper { display: flex; align-items: center; background: var(--surface2); border-radius: 20px; overflow: hidden; }
+.qty-btn { width: 26px; height: 22px; border: none; background: transparent; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text2); display: flex; align-items: center; justify-content: center; }
+.qty-btn:active { background: var(--surface3); }
+.qty-num { font-size: 12px; font-weight: 500; min-width: 20px; text-align: center; color: var(--text); }
 
-    .drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 200; }
-    .drawer-overlay.visible { opacity: 1; pointer-events: all; }
-    .drawer {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: var(--surface); border-radius: 20px 20px 0 0;
-      padding: 1.5rem 1.25rem 2rem;
-      transform: translateY(100%); transition: transform 0.25s cubic-bezier(0.32,0.72,0,1);
-      z-index: 300; max-width: 480px; margin: 0 auto;
-    }
-    .drawer.open { transform: translateY(0); }
-    .drawer-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 1.25rem; }
-    .drawer-title { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 1.25rem; }
+.empty-state { text-align: center; padding: 3.5rem 1.25rem; color: var(--text3); font-size: 13px; }
+.empty-state p:first-child { font-size: 32px; margin-bottom: 0.5rem; }
 
-    .field { margin-bottom: 1rem; }
-    .field label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 5px; }
-    .field input, .field select {
-      width: 100%; padding: 10px 12px; font-size: 14px;
-      font-family: 'DM Sans', sans-serif;
-      border: 1px solid var(--border2); border-radius: 10px;
-      background: var(--surface); color: var(--text); outline: none;
-    }
-    .field input:focus, .field select:focus { border-color: var(--accent); }
-    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .holdbarhet-box { font-size: 12px; color: var(--blue); background: var(--blue-bg); border-radius: 8px; padding: 8px 10px; margin-bottom: 1rem; display: none; line-height: 1.5; }
-    .holdbarhet-box.visible { display: block; }
-    .holdbarhet-box.loading { color: var(--text3); background: var(--surface2); }
-    .holdbarhet-box.error { color: var(--red); background: var(--red-bg); }
-    .months-row { display: flex; gap: 8px; align-items: flex-end; }
-    .months-row .field { flex: 1; margin-bottom: 0; }
-    .lookup-btn {
-      padding: 10px 14px; font-size: 12px; font-weight: 500;
-      border: 1px solid var(--border2); border-radius: 10px;
-      background: var(--surface2); color: var(--text2);
-      cursor: pointer; white-space: nowrap; font-family: 'DM Sans', sans-serif; height: 42px;
-    }
-    .save-btn {
-      width: 100%; padding: 13px; font-size: 15px; font-weight: 500;
-      background: var(--text); color: var(--bg); border: none;
-      border-radius: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 0.5rem;
-    }
-    .save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.fab { position: fixed; bottom: 1.5rem; right: 1.5rem; width: 56px; height: 56px; border-radius: 50%; background: var(--text); color: var(--bg); font-size: 26px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.22); transition: transform 0.15s; z-index: 100; }
+.fab.open { transform: rotate(45deg); }
 
-    .settings-section { margin-bottom: 1.5rem; }
-    .settings-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; }
-    .member-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--border); }
-    .member-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--blue-bg); color: var(--blue); font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .member-info { flex: 1; min-width: 0; }
-    .member-name { font-size: 14px; font-weight: 500; }
-    .member-email { font-size: 12px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .member-tag { font-size: 10px; padding: 2px 7px; border-radius: 8px; background: var(--green-bg); color: var(--green); white-space: nowrap; }
-    .remove-member-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 14px; padding: 4px; }
-    .remove-member-btn:hover { color: var(--red); }
-    .invite-row { display: flex; gap: 8px; margin-top: 0.75rem; }
-    .invite-row input { flex: 1; padding: 9px 12px; font-size: 13px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border2); border-radius: 10px; background: var(--surface); color: var(--text); outline: none; }
-    .invite-row button { padding: 9px 14px; font-size: 13px; font-weight: 500; background: var(--text); color: var(--bg); border: none; border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
-    .danger-btn { width: 100%; padding: 10px; font-size: 13px; color: var(--red); background: var(--red-bg); border: none; border-radius: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-bottom: 8px; }
+.drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.32); opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 200; }
+.drawer-overlay.visible { opacity: 1; pointer-events: all; }
+.drawer { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-radius: 22px 22px 0 0; padding: 1.5rem 1.25rem 2.5rem; transform: translateY(100%); transition: transform 0.28s cubic-bezier(0.32,0.72,0,1); z-index: 300; max-width: 480px; margin: 0 auto; max-height: 92vh; overflow-y: auto; }
+.drawer.open { transform: translateY(0); }
+.drawer-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 1.5rem; }
+.drawer-title { font-family: 'DM Serif Display', serif; font-size: 22px; margin-bottom: 1.25rem; }
 
-    .toast { position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text); color: var(--bg); font-size: 13px; padding: 8px 16px; border-radius: 20px; opacity: 0; transition: all 0.2s; pointer-events: none; z-index: 400; white-space: nowrap; }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.field { margin-bottom: 1rem; }
+.field label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 5px; font-weight: 500; }
+.field input, .field select { width: 100%; padding: 10px 12px; font-size: 14px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); outline: none; }
+.field input:focus, .field select:focus { border-color: var(--accent); }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.holdbarhet-box { font-size: 12px; color: var(--blue); background: var(--blue-bg); border-radius: var(--radius-sm); padding: 8px 10px; margin-bottom: 1rem; display: none; line-height: 1.5; }
+.holdbarhet-box.visible { display: block; }
+.holdbarhet-box.loading { color: var(--text3); background: var(--surface2); }
+.holdbarhet-box.error { color: var(--red); background: var(--red-bg); }
+.months-row { display: flex; gap: 8px; align-items: flex-end; }
+.months-row .field { flex: 1; margin-bottom: 0; }
+.lookup-btn { padding: 10px 14px; font-size: 12px; font-weight: 500; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--surface2); color: var(--text2); cursor: pointer; white-space: nowrap; font-family: 'DM Sans', sans-serif; height: 42px; }
+
+.save-btn { width: 100%; padding: 13px; font-size: 15px; font-weight: 500; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 0.5rem; }
+.save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.delete-item-btn { width: 100%; padding: 11px; font-size: 14px; color: var(--red); background: var(--red-bg); border: none; border-radius: var(--radius); cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 8px; }
+
+.cat-picker { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.cat-option { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.12s; }
+.cat-option.selected { color: #fff; }
+
+.settings-section { margin-bottom: 1.75rem; }
+.settings-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.6rem; font-weight: 500; }
+.member-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--border); }
+.member-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--blue-bg); color: var(--blue); font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.member-info { flex: 1; min-width: 0; }
+.member-name { font-size: 14px; font-weight: 500; }
+.member-email { font-size: 12px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.member-tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: var(--green-bg); color: var(--green); white-space: nowrap; font-weight: 500; }
+.remove-member-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 14px; padding: 4px; }
+.invite-row { display: flex; gap: 8px; margin-top: 0.75rem; }
+.invite-row input { flex: 1; padding: 9px 12px; font-size: 13px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); outline: none; }
+.invite-row button { padding: 9px 14px; font-size: 13px; font-weight: 500; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+
+.cat-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 0.75rem; }
+.cat-row { display: flex; align-items: center; gap: 8px; }
+.cat-color-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.cat-row-name { flex: 1; font-size: 14px; }
+.cat-del-btn { background: none; border: none; cursor: pointer; font-size: 14px; color: var(--text3); padding: 3px 5px; border-radius: 4px; }
+.color-picker-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.color-swatch { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: border-color 0.1s; }
+.color-swatch.selected { border-color: var(--text); }
+.new-cat-row { display: flex; gap: 8px; align-items: center; }
+.new-cat-row input { flex: 1; padding: 8px 10px; font-size: 13px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); outline: none; }
+.new-cat-row button { padding: 8px 12px; font-size: 13px; font-weight: 500; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+
+.danger-btn { width: 100%; padding: 10px; font-size: 13px; color: var(--red); background: var(--red-bg); border: none; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans', sans-serif; margin-bottom: 8px; }
+
+.toast { position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text); color: var(--bg); font-size: 13px; padding: 8px 18px; border-radius: 20px; opacity: 0; transition: all 0.2s; pointer-events: none; z-index: 500; white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+```
+
   </style>
 </head>
 <body>
 
-<!-- AUTH -->
 <div id="auth-screen" class="screen">
   <div class="auth-icon">🧊</div>
   <h1 class="auth-title">Fryseren</h1>
   <p class="auth-sub">Hold styr på hva som er i fryseren.<br>Del kun med familien din.</p>
   <button class="google-btn" onclick="signInWithGoogle()">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-    </svg>
+    <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
     Logg inn med Google
   </button>
 </div>
 
-<!-- SETUP -->
 <div id="setup-screen" class="screen">
   <div class="auth-icon">🏠</div>
   <h2>Velkommen!</h2>
-  <p>Du er ikke med i noen husstand enda.<br>Opprett en ny eller vent på invitasjon.</p>
+  <p>Du er ikke med i noen husstand enda.</p>
   <div class="setup-card">
     <h3>Opprett ny husstand</h3>
     <p>Du blir administrator og kan invitere andre.</p>
@@ -250,7 +188,6 @@
   <button class="setup-btn secondary" onclick="sjekkInvitasjoner()">Sjekk invitasjoner</button>
 </div>
 
-<!-- INVITASJON -->
 <div id="invite-screen" class="screen">
   <div class="auth-icon">✉️</div>
   <h2>Du er invitert!</h2>
@@ -266,7 +203,6 @@
   </div>
 </div>
 
-<!-- APP -->
 <div id="app-screen" class="screen">
   <div class="app-header">
     <div class="app-header-left">
@@ -276,50 +212,36 @@
     </div>
     <button class="icon-btn-sm" onclick="openSettings()">⚙️</button>
   </div>
-
   <div class="stats">
-    <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Totalt</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Varer</div></div>
     <div class="stat-card"><div class="stat-num warn" id="stat-soon">0</div><div class="stat-lbl">Snart utgått</div></div>
     <div class="stat-card"><div class="stat-num danger" id="stat-expired">0</div><div class="stat-lbl">Utgått</div></div>
   </div>
-
-  <div class="filters">
-    <button class="filter-pill active" data-filter="alle">Alle</button>
-    <button class="filter-pill" data-filter="oppe">Frys oppe</button>
-    <button class="filter-pill" data-filter="nede">Frys nede</button>
-    <button class="filter-pill" data-filter="ravare">Råvarer</button>
-    <button class="filter-pill" data-filter="ferdig">Ferdigmiddager</button>
-    <button class="filter-pill" data-filter="utgatt">Utgått</button>
-  </div>
-
+  <div class="filters-wrap"><div class="filters" id="filters-bar"></div></div>
   <div id="items-container"></div>
-  <button class="fab" id="fab" onclick="toggleDrawer()">+</button>
+  <button class="fab" id="fab" onclick="openAddDrawer()">+</button>
 </div>
 
-<!-- LEGG TIL VARE -->
-<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
-<div class="drawer" id="drawer">
+<div class="drawer-overlay" id="overlay" onclick="closeItemDrawer()"></div>
+<div class="drawer" id="item-drawer">
   <div class="drawer-handle"></div>
-  <div class="drawer-title">Legg til vare</div>
+  <div class="drawer-title" id="item-drawer-title">Legg til vare</div>
   <div class="field">
     <label>Navn på vare</label>
     <input type="text" id="inp-name" placeholder="F.eks. kyllingkjøttdeig" oninput="onNameInput()" />
   </div>
-  <div class="field-row">
-    <div class="field">
-      <label>Type</label>
-      <select id="inp-type">
-        <option value="ravare">Råvare</option>
-        <option value="ferdig">Ferdigmiddag</option>
-        <option value="annet">Annet</option>
-      </select>
-    </div>
-    <div class="field">
+  <div class="field">
+    <label>Kategori</label>
+    <div class="cat-picker" id="cat-picker"></div>
+  </div>
+  <div class="field-row" style="margin-bottom:1rem">
+    <div class="field" style="margin-bottom:0">
       <label>Hvilken fryser</label>
-      <select id="inp-fryser">
-        <option value="oppe">Oppe</option>
-        <option value="nede">Nede</option>
-      </select>
+      <select id="inp-fryser"><option value="oppe">Oppe</option><option value="nede">Nede</option></select>
+    </div>
+    <div class="field" style="margin-bottom:0">
+      <label>Antall / porsjoner</label>
+      <input type="number" id="inp-qty" value="1" min="1" max="999" />
     </div>
   </div>
   <div class="field">
@@ -327,7 +249,7 @@
     <input type="date" id="inp-date" />
   </div>
   <div class="months-row">
-    <div class="field">
+    <div class="field" style="margin-bottom:0">
       <label>Holdbarhet (måneder)</label>
       <input type="number" id="inp-months" value="3" min="1" max="24" />
     </div>
@@ -335,19 +257,26 @@
   </div>
   <div class="holdbarhet-box" id="holdbarhet-box"></div>
   <button class="save-btn" id="save-btn" onclick="saveItem()">Legg til i fryseren</button>
+  <button class="delete-item-btn" id="delete-item-btn" style="display:none" onclick="deleteCurrentItem()">Fjern fra fryseren</button>
 </div>
 
-<!-- INNSTILLINGER -->
 <div class="drawer-overlay" id="settings-overlay" onclick="closeSettings()"></div>
 <div class="drawer" id="settings-drawer">
   <div class="drawer-handle"></div>
   <div class="drawer-title">Innstillinger</div>
-
   <div class="settings-section">
     <div class="settings-label">Husstand</div>
     <div style="font-size:15px; font-weight:500;" id="settings-husstand-navn">–</div>
   </div>
-
+  <div class="settings-section">
+    <div class="settings-label">Kategorier</div>
+    <div class="cat-list" id="cat-management-list"></div>
+    <div class="color-picker-row" id="new-cat-colors"></div>
+    <div class="new-cat-row">
+      <input type="text" id="new-cat-name" placeholder="Ny kategori..." />
+      <button onclick="leggTilKategori()">Legg til</button>
+    </div>
+  </div>
   <div class="settings-section">
     <div class="settings-label">Medlemmer</div>
     <div id="members-list"></div>
@@ -356,7 +285,6 @@
       <button onclick="sendInvitasjon()">Inviter</button>
     </div>
   </div>
-
   <div class="settings-section">
     <div class="settings-label">Konto</div>
     <button class="danger-btn" onclick="signOut()">Logg ut</button>
@@ -383,19 +311,24 @@
   };
   const ANTHROPIC_API_KEY = "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";
 
+  const DEFAULT_CATS = [
+    { id: 'ravare', name: 'Råvare', color: '#1A5FA8' },
+    { id: 'ferdig', name: 'Ferdigmiddag', color: '#1D7A56' },
+    { id: 'syltetoy', name: 'Syltetøy/preserves', color: '#9B4494' },
+    { id: 'brod', name: 'Brød/bakst', color: '#B06A00' },
+    { id: 'annet', name: 'Annet', color: '#6B6760' },
+  ];
+  const CAT_COLORS = ['#1A5FA8','#1D7A56','#B06A00','#C0392B','#9B4494','#0E7490','#B45309','#6B6760','#2C5F3F','#7C3AED'];
+
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const provider = new GoogleAuthProvider();
 
-  let currentUser = null;
-  let currentHusstand = null;
-  let unsubItems = null;
-  let unsubHusstand = null;
-  let currentFilter = 'alle';
-  let allItems = [];
-  let pendingInvite = null;
-  let nameTimer = null;
+  let currentUser=null, currentHusstand=null, unsubItems=null, unsubHusstand=null;
+  let currentFilter='alle', allItems=[], categories=[...DEFAULT_CATS];
+  let pendingInvite=null, nameTimer=null, editingItemId=null;
+  let selectedCatId=null, selectedNewCatColor=CAT_COLORS[0];
 
   function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -403,41 +336,27 @@
   }
 
   window.signInWithGoogle = async () => {
-    try { await signInWithPopup(auth, provider); }
-    catch(e) { console.error(e); showToast('Innlogging feilet'); }
+    try { await signInWithPopup(auth, provider); } catch(e) { showToast('Innlogging feilet'); }
   };
-
   window.signOut = async () => {
-    if (unsubItems) unsubItems();
-    if (unsubHusstand) unsubHusstand();
-    await fbSignOut(auth);
-    currentHusstand = null;
-    closeSettings();
-    showScreen('auth-screen');
+    if (unsubItems) unsubItems(); if (unsubHusstand) unsubHusstand();
+    await fbSignOut(auth); currentHusstand=null; closeSettings(); showScreen('auth-screen');
   };
 
-  onAuthStateChanged(auth, async user => {
-    currentUser = user;
-    if (!user) { showScreen('auth-screen'); return; }
-    await sjekkBrukerStatus();
-  });
+  onAuthStateChanged(auth, async user => { currentUser=user; if (!user){showScreen('auth-screen');return;} await sjekkBrukerStatus(); });
 
   async function sjekkBrukerStatus() {
-    const q = query(collection(db, 'husstander'), where('members', 'array-contains', currentUser.email));
+    const q = query(collection(db,'husstander'), where('members','array-contains',currentUser.email));
     const snap = await getDocs(q);
     if (!snap.empty) { startHusstand(snap.docs[0]); return; }
-
-    const invQ = query(collection(db, 'invitasjoner'),
-      where('toEmail', '==', currentUser.email),
-      where('status', '==', 'pending'));
+    const invQ = query(collection(db,'invitasjoner'), where('toEmail','==',currentUser.email), where('status','==','pending'));
     const invSnap = await getDocs(invQ);
     if (!invSnap.empty) {
       const inv = invSnap.docs[0];
       pendingInvite = { id: inv.id, ...inv.data() };
       document.getElementById('invite-husstand-navn').textContent = pendingInvite.husstandNavn;
       document.getElementById('invite-fra-epost').textContent = 'Fra: ' + pendingInvite.fromEmail;
-      showScreen('invite-screen');
-      return;
+      showScreen('invite-screen'); return;
     }
     showScreen('setup-screen');
   }
@@ -450,298 +369,289 @@
   window.opprettHusstand = async () => {
     const navn = document.getElementById('husstand-navn').value.trim();
     if (!navn) { showToast('Gi husstanden et navn'); return; }
-    const ref = await addDoc(collection(db, 'husstander'), {
-      navn, owner: currentUser.email,
-      members: [currentUser.email],
-      memberNames: { [currentUser.email]: currentUser.displayName || currentUser.email },
-      createdAt: Date.now()
+    const ref = await addDoc(collection(db,'husstander'), {
+      navn, owner: currentUser.email, members: [currentUser.email],
+      memberNames: { [currentUser.email]: currentUser.displayName||currentUser.email },
+      categories: DEFAULT_CATS, createdAt: Date.now()
     });
-    const snap = await getDoc(ref);
-    startHusstand(snap);
+    startHusstand(await getDoc(ref));
   };
 
   window.aksepterInvitasjon = async () => {
     if (!pendingInvite) return;
-    const husRef = doc(db, 'husstander', pendingInvite.husstandId);
-    await updateDoc(husRef, {
-      members: arrayUnion(currentUser.email),
-      [`memberNames.${currentUser.email}`]: currentUser.displayName || currentUser.email
-    });
-    await updateDoc(doc(db, 'invitasjoner', pendingInvite.id), { status: 'accepted' });
-    const snap = await getDoc(husRef);
-    startHusstand(snap);
+    const husRef = doc(db,'husstander',pendingInvite.husstandId);
+    await updateDoc(husRef, { members: arrayUnion(currentUser.email), [`memberNames.${currentUser.email}`]: currentUser.displayName||currentUser.email });
+    await updateDoc(doc(db,'invitasjoner',pendingInvite.id), { status: 'accepted' });
+    startHusstand(await getDoc(husRef));
   };
 
   window.avvisInvitasjon = async () => {
     if (!pendingInvite) return;
-    await updateDoc(doc(db, 'invitasjoner', pendingInvite.id), { status: 'declined' });
-    pendingInvite = null;
-    showScreen('setup-screen');
+    await updateDoc(doc(db,'invitasjoner',pendingInvite.id), { status: 'declined' });
+    pendingInvite=null; showScreen('setup-screen');
   };
 
   function startHusstand(snap) {
     currentHusstand = { id: snap.id, ...snap.data() };
+    if (!currentHusstand.categories) { updateDoc(doc(db,'husstander',currentHusstand.id),{categories:DEFAULT_CATS}); currentHusstand.categories=DEFAULT_CATS; }
+    categories = currentHusstand.categories;
     document.getElementById('husstand-navn-display').textContent = currentHusstand.navn;
     document.getElementById('settings-husstand-navn').textContent = currentHusstand.navn;
-    document.getElementById('header-date').textContent =
-      new Date().toLocaleDateString('nb-NO', { weekday: 'long', day: 'numeric', month: 'long' });
+    document.getElementById('header-date').textContent = new Date().toLocaleDateString('nb-NO',{weekday:'long',day:'numeric',month:'long'});
 
     if (unsubHusstand) unsubHusstand();
-    unsubHusstand = onSnapshot(doc(db, 'husstander', currentHusstand.id), d => {
-      if (d.exists()) { currentHusstand = { id: d.id, ...d.data() }; renderMembers(); }
+    unsubHusstand = onSnapshot(doc(db,'husstander',currentHusstand.id), d => {
+      if (d.exists()) { currentHusstand={id:d.id,...d.data()}; categories=currentHusstand.categories||DEFAULT_CATS; renderMembers(); renderCatManagement(); renderFilters(); renderItems(); }
     });
-
     if (unsubItems) unsubItems();
-    const q = query(collection(db, 'husstander', currentHusstand.id, 'items'), orderBy('createdAt', 'desc'));
-    unsubItems = onSnapshot(q, snap => {
-      allItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    unsubItems = onSnapshot(query(collection(db,'husstander',currentHusstand.id,'items'),orderBy('createdAt','desc')), snap => {
+      allItems = snap.docs.map(d=>({id:d.id,...d.data()})); renderItems();
+    });
+    renderFilters(); showScreen('app-screen');
+  }
+
+  function renderFilters() {
+    const bar = document.getElementById('filters-bar');
+    let html = `<button class="filter-pill ${currentFilter==='alle'?'active':''}" data-filter="alle">Alle</button>
+      <button class="filter-pill ${currentFilter==='oppe'?'active':''}" data-filter="oppe">Frys oppe</button>
+      <button class="filter-pill ${currentFilter==='nede'?'active':''}" data-filter="nede">Frys nede</button>`;
+    (categories||DEFAULT_CATS).forEach(c => {
+      html += `<button class="filter-pill ${currentFilter===c.id?'active':''}" data-filter="${c.id}">${c.name}</button>`;
+    });
+    html += `<button class="filter-pill ${currentFilter==='utgatt'?'active':''}" data-filter="utgatt">Utgått</button>`;
+    bar.innerHTML = html;
+    bar.querySelectorAll('.filter-pill').forEach(b => b.addEventListener('click', () => {
+      currentFilter = b.dataset.filter;
+      bar.querySelectorAll('.filter-pill').forEach(x => x.classList.toggle('active', x===b));
       renderItems();
-    });
-
-    showScreen('app-screen');
+    }));
   }
 
-  window.sendInvitasjon = async () => {
-    const email = document.getElementById('invite-email').value.trim().toLowerCase();
-    if (!email || !email.includes('@')) { showToast('Ugyldig e-post'); return; }
-    if (currentHusstand.members.includes(email)) { showToast('Allerede medlem'); return; }
-    await addDoc(collection(db, 'invitasjoner'), {
-      husstandId: currentHusstand.id,
-      husstandNavn: currentHusstand.navn,
-      fromEmail: currentUser.email,
-      toEmail: email,
-      status: 'pending',
-      createdAt: Date.now()
-    });
-    document.getElementById('invite-email').value = '';
-    showToast('Invitasjon sendt til ' + email);
-  };
-
-  window.fjernMedlem = async (email) => {
-    if (!confirm('Fjerne ' + email + ' fra husstanden?')) return;
-    await updateDoc(doc(db, 'husstander', currentHusstand.id), { members: arrayRemove(email) });
-    showToast('Fjernet');
-  };
-
-  window.forlateHusstand = async () => {
-    if (!confirm('Er du sikker på at du vil forlate husstanden?')) return;
-    await updateDoc(doc(db, 'husstander', currentHusstand.id), { members: arrayRemove(currentUser.email) });
-    if (unsubItems) unsubItems();
-    if (unsubHusstand) unsubHusstand();
-    currentHusstand = null;
-    closeSettings();
-    showScreen('setup-screen');
-  };
-
-  function renderMembers() {
-    if (!currentHusstand) return;
-    const list = document.getElementById('members-list');
-    const members = currentHusstand.members || [];
-    const names = currentHusstand.memberNames || {};
-    list.innerHTML = members.map(email => {
-      const name = names[email] || email;
-      const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-      const isOwner = email === currentHusstand.owner;
-      const isMe = email === currentUser.email;
-      return `<div class="member-row">
-        <div class="member-avatar">${initials}</div>
-        <div class="member-info">
-          <div class="member-name">${name}${isMe ? ' (deg)' : ''}</div>
-          <div class="member-email">${email}</div>
-        </div>
-        <span class="member-tag">${isOwner ? 'Admin' : 'Medlem'}</span>
-        ${!isMe && currentHusstand.owner === currentUser.email
-          ? `<button class="remove-member-btn" onclick="fjernMedlem('${email}')">✕</button>`
-          : ''}
-      </div>`;
-    }).join('');
+  function renderCatPicker() {
+    document.getElementById('cat-picker').innerHTML = (categories||DEFAULT_CATS).map(c =>
+      `<button class="cat-option ${selectedCatId===c.id?'selected':''}" onclick="selectCat('${c.id}')"
+        style="${selectedCatId===c.id?'background:'+c.color+';border-color:'+c.color+';color:#fff':''}">${c.name}</button>`
+    ).join('');
   }
+  window.selectCat = (id) => { selectedCatId=id; renderCatPicker(); };
+
+  function renderCatManagement() {
+    document.getElementById('cat-management-list').innerHTML = (categories||DEFAULT_CATS).map(c =>
+      `<div class="cat-row"><div class="cat-color-dot" style="background:${c.color}"></div><div class="cat-row-name">${c.name}</div><button class="cat-del-btn" onclick="slettKategori('${c.id}')">✕</button></div>`
+    ).join('');
+    document.getElementById('new-cat-colors').innerHTML = CAT_COLORS.map(c =>
+      `<div class="color-swatch ${selectedNewCatColor===c?'selected':''}" style="background:${c}" onclick="velgFarge('${c}')"></div>`
+    ).join('');
+  }
+  window.velgFarge = (c) => { selectedNewCatColor=c; renderCatManagement(); };
+  window.leggTilKategori = async () => {
+    const navn = document.getElementById('new-cat-name').value.trim();
+    if (!navn) { showToast('Skriv inn et kategorinavn'); return; }
+    const updated = [...(categories||DEFAULT_CATS), { id:'cat_'+Date.now(), name:navn, color:selectedNewCatColor }];
+    await updateDoc(doc(db,'husstander',currentHusstand.id),{categories:updated});
+    document.getElementById('new-cat-name').value=''; showToast(navn+' lagt til ✓');
+  };
+  window.slettKategori = async (id) => {
+    if (!confirm('Slette denne kategorien?')) return;
+    await updateDoc(doc(db,'husstander',currentHusstand.id),{categories:(categories||DEFAULT_CATS).filter(c=>c.id!==id)});
+  };
+
+  window.openAddDrawer = () => {
+    editingItemId=null; selectedCatId=(categories&&categories.length>0)?categories[0].id:null;
+    document.getElementById('item-drawer-title').textContent='Legg til vare';
+    document.getElementById('inp-name').value='';
+    document.getElementById('inp-qty').value='1';
+    document.getElementById('inp-fryser').value='oppe';
+    document.getElementById('inp-date').value=new Date().toISOString().split('T')[0];
+    document.getElementById('inp-months').value='3';
+    document.getElementById('holdbarhet-box').className='holdbarhet-box';
+    document.getElementById('save-btn').textContent='Legg til i fryseren';
+    document.getElementById('delete-item-btn').style.display='none';
+    renderCatPicker();
+    document.getElementById('item-drawer').classList.add('open');
+    document.getElementById('overlay').classList.add('visible');
+    document.getElementById('fab').classList.add('open');
+    setTimeout(()=>document.getElementById('inp-name').focus(),300);
+  };
+
+  window.openEditDrawer = (id) => {
+    const item=allItems.find(i=>i.id===id); if(!item) return;
+    editingItemId=id; selectedCatId=item.catId||null;
+    document.getElementById('item-drawer-title').textContent='Rediger vare';
+    document.getElementById('inp-name').value=item.name;
+    document.getElementById('inp-qty').value=item.qty||1;
+    document.getElementById('inp-fryser').value=item.fryser||'oppe';
+    document.getElementById('inp-date').value=item.date;
+    document.getElementById('inp-months').value=item.months;
+    document.getElementById('holdbarhet-box').className='holdbarhet-box';
+    document.getElementById('save-btn').textContent='Lagre endringer';
+    document.getElementById('delete-item-btn').style.display='block';
+    renderCatPicker();
+    document.getElementById('item-drawer').classList.add('open');
+    document.getElementById('overlay').classList.add('visible');
+    document.getElementById('fab').classList.add('open');
+  };
+
+  window.closeItemDrawer = () => {
+    document.getElementById('item-drawer').classList.remove('open');
+    document.getElementById('overlay').classList.remove('visible');
+    document.getElementById('fab').classList.remove('open');
+    editingItemId=null;
+  };
 
   window.saveItem = async () => {
-    const name = document.getElementById('inp-name').value.trim();
-    const type = document.getElementById('inp-type').value;
-    const fryser = document.getElementById('inp-fryser').value;
-    const date = document.getElementById('inp-date').value;
-    const months = parseInt(document.getElementById('inp-months').value);
-    if (!name || !date) { showToast('Fyll inn navn og dato'); return; }
-    const btn = document.getElementById('save-btn');
-    btn.disabled = true;
+    const name=document.getElementById('inp-name').value.trim();
+    const qty=parseInt(document.getElementById('inp-qty').value)||1;
+    const fryser=document.getElementById('inp-fryser').value;
+    const date=document.getElementById('inp-date').value;
+    const months=parseInt(document.getElementById('inp-months').value);
+    if (!name||!date) { showToast('Fyll inn navn og dato'); return; }
+    const btn=document.getElementById('save-btn'); btn.disabled=true;
+    const data={name,qty,fryser,date,months,catId:selectedCatId,addedBy:currentUser.displayName||currentUser.email};
     try {
-      await addDoc(collection(db, 'husstander', currentHusstand.id, 'items'), {
-        name, type, fryser, date, months,
-        addedBy: currentUser.displayName || currentUser.email,
-        createdAt: Date.now()
-      });
-      closeDrawer();
-      showToast(name + ' lagt til ✓');
+      if (editingItemId) { await updateDoc(doc(db,'husstander',currentHusstand.id,'items',editingItemId),data); showToast('Endringer lagret ✓'); }
+      else { data.createdAt=Date.now(); await addDoc(collection(db,'husstander',currentHusstand.id,'items'),data); showToast(name+' lagt til ✓'); }
+      closeItemDrawer();
     } catch(e) { showToast('Noe gikk galt'); console.error(e); }
-    btn.disabled = false;
+    btn.disabled=false;
   };
 
-  window.removeItem = async (id, name) => {
-    if (!confirm('Fjerne ' + name + ' fra fryseren?')) return;
-    await deleteDoc(doc(db, 'husstander', currentHusstand.id, 'items', id));
-    showToast('Fjernet');
+  window.deleteCurrentItem = async () => {
+    if (!editingItemId) return;
+    const item=allItems.find(i=>i.id===editingItemId);
+    if (!confirm('Fjerne '+(item?.name||'varen')+' fra fryseren?')) return;
+    await deleteDoc(doc(db,'husstander',currentHusstand.id,'items',editingItemId));
+    closeItemDrawer(); showToast('Fjernet');
+  };
+
+  window.adjustQty = async (id, delta, e) => {
+    e.stopPropagation();
+    const item=allItems.find(i=>i.id===id); if(!item) return;
+    await updateDoc(doc(db,'husstander',currentHusstand.id,'items',id),{qty:Math.max(1,(item.qty||1)+delta)});
   };
 
   window.onNameInput = () => {
     clearTimeout(nameTimer);
-    const box = document.getElementById('holdbarhet-box');
-    box.className = 'holdbarhet-box';
-    const name = document.getElementById('inp-name').value.trim();
-    if (name.length < 3 || !ANTHROPIC_API_KEY) return;
-    nameTimer = setTimeout(() => lookupHoldbarhet(), 900);
+    document.getElementById('holdbarhet-box').className='holdbarhet-box';
+    const name=document.getElementById('inp-name').value.trim();
+    if (name.length<3||!ANTHROPIC_API_KEY) return;
+    nameTimer=setTimeout(()=>lookupHoldbarhet(),900);
   };
 
   window.lookupHoldbarhet = async () => {
-    const name = document.getElementById('inp-name').value.trim();
-    if (!name || !ANTHROPIC_API_KEY) return;
-    const box = document.getElementById('holdbarhet-box');
-    box.className = 'holdbarhet-box loading visible';
-    box.textContent = 'Slår opp holdbarhet...';
+    const name=document.getElementById('inp-name').value.trim();
+    if (!name||!ANTHROPIC_API_KEY) return;
+    const box=document.getElementById('holdbarhet-box');
+    box.className='holdbarhet-box loading visible'; box.textContent='Slår opp holdbarhet...';
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': ANTHROPIC_API_KEY,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 150,
-          system: 'Du er matekspert. Svar KUN med JSON: {"måneder": tall, "forklaring": "kort norsk setning"}. Ingen markdown.',
-          messages: [{ role: 'user', content: 'Holdbarhet i hjemmefryser (-18°C) for: "' + name + '"' }]
-        })
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:150,
+          system:'Du er matekspert. Svar KUN med JSON: {"måneder": tall, "forklaring": "kort norsk setning"}. Ingen markdown.',
+          messages:[{role:'user',content:'Holdbarhet i hjemmefryser (-18°C) for: "'+name+'"'}]})
       });
-      const data = await res.json();
-      const parsed = JSON.parse(data.content[0].text);
-      const mnd = Math.round(parsed.måneder);
-      document.getElementById('inp-months').value = mnd;
-      box.className = 'holdbarhet-box visible';
-      box.textContent = parsed.forklaring + ' → ' + mnd + ' mnd anbefalt';
-    } catch(e) {
-      box.className = 'holdbarhet-box error visible';
-      box.textContent = 'Kunne ikke slå opp – sett måneder manuelt.';
-    }
+      const data=await res.json();
+      const parsed=JSON.parse(data.content[0].text);
+      const mnd=Math.round(parsed.måneder);
+      document.getElementById('inp-months').value=mnd;
+      box.className='holdbarhet-box visible';
+      box.textContent=parsed.forklaring+' → '+mnd+' mnd anbefalt';
+    } catch(e) { box.className='holdbarhet-box error visible'; box.textContent='Kunne ikke slå opp – sett måneder manuelt.'; }
   };
 
-  document.querySelectorAll('.filter-pill').forEach(b => {
-    b.addEventListener('click', () => {
-      currentFilter = b.dataset.filter;
-      document.querySelectorAll('.filter-pill').forEach(x => x.classList.toggle('active', x === b));
-      renderItems();
-    });
-  });
-
-  function dagerTil(dateStr, months) {
-    const ut = new Date(dateStr);
-    ut.setMonth(ut.getMonth() + months);
-    return Math.round((ut - new Date()) / 86400000);
-  }
-  function status(item) {
-    const d = dagerTil(item.date, item.months);
-    return d < 0 ? 'expired' : d <= 14 ? 'soon' : 'ok';
-  }
+  function dagerTil(dateStr,months) { const ut=new Date(dateStr); ut.setMonth(ut.getMonth()+months); return Math.round((ut-new Date())/86400000); }
+  function itemStatus(item) { const d=dagerTil(item.date,item.months); return d<0?'expired':d<=14?'soon':'ok'; }
   function formatDager(d) {
-    if (d < 0) return 'Utgått – ' + Math.abs(d) + ' dager siden';
-    if (d === 0) return 'Utgår i dag!';
-    if (d <= 14) return d + ' dager igjen';
-    const m = Math.floor(d / 30), r = d % 30;
-    return m > 0 ? (m + ' mnd' + (r > 0 ? ' ' + r + ' d' : '') + ' igjen') : d + ' dager igjen';
+    if (d<0) return 'Utgått – '+Math.abs(d)+' d siden';
+    if (d===0) return 'Utgår i dag!';
+    if (d<=14) return d+' dager igjen';
+    const m=Math.floor(d/30),r=d%30;
+    return m>0?(m+' mnd'+(r>0?' '+r+' d':'')+' igjen'):d+' d igjen';
   }
-
-  const TYPE_LABEL = { ravare: 'Råvare', ferdig: 'Ferdigmiddag', annet: 'Annet' };
-  const TYPE_BADGE = { ravare: 'badge-ravare', ferdig: 'badge-ferdig', annet: 'badge-annet' };
+  function getCat(catId) { return (categories||DEFAULT_CATS).find(c=>c.id===catId)||{name:'Annet',color:'#6B6760'}; }
 
   function renderItems() {
-    let filtered = allItems.filter(i => {
-      if (currentFilter === 'alle') return true;
-      if (currentFilter === 'oppe') return i.fryser === 'oppe';
-      if (currentFilter === 'nede') return i.fryser === 'nede';
-      if (currentFilter === 'ravare') return i.type === 'ravare';
-      if (currentFilter === 'ferdig') return i.type === 'ferdig';
-      if (currentFilter === 'utgatt') return status(i) === 'expired';
-      return true;
+    let filtered=allItems.filter(i=>{
+      if (currentFilter==='alle') return true;
+      if (currentFilter==='oppe') return i.fryser==='oppe';
+      if (currentFilter==='nede') return i.fryser==='nede';
+      if (currentFilter==='utgatt') return itemStatus(i)==='expired';
+      return i.catId===currentFilter;
     });
-    filtered.sort((a, b) => dagerTil(a.date, a.months) - dagerTil(b.date, b.months));
-
-    document.getElementById('stat-total').textContent = allItems.length;
-    document.getElementById('stat-soon').textContent = allItems.filter(i => status(i) === 'soon').length;
-    document.getElementById('stat-expired').textContent = allItems.filter(i => status(i) === 'expired').length;
-
-    const container = document.getElementById('items-container');
-    if (filtered.length === 0) {
-      container.innerHTML = '<div class="empty-state"><p>🧊</p><p>Ingenting her enda</p></div>';
-      return;
-    }
-
-    const groups = [
-      { label: 'Fryseren oppe', items: filtered.filter(i => i.fryser === 'oppe') },
-      { label: 'Fryseren nede', items: filtered.filter(i => i.fryser === 'nede') }
+    filtered.sort((a,b)=>dagerTil(a.date,a.months)-dagerTil(b.date,b.months));
+    document.getElementById('stat-total').textContent=allItems.length;
+    document.getElementById('stat-soon').textContent=allItems.filter(i=>itemStatus(i)==='soon').length;
+    document.getElementById('stat-expired').textContent=allItems.filter(i=>itemStatus(i)==='expired').length;
+    const container=document.getElementById('items-container');
+    if (!filtered.length) { container.innerHTML='<div class="empty-state"><p>🧊</p><p>Ingenting her enda</p></div>'; return; }
+    const groups=[
+      {label:'Fryseren oppe',items:filtered.filter(i=>i.fryser==='oppe')},
+      {label:'Fryseren nede',items:filtered.filter(i=>i.fryser==='nede')}
     ];
-    let html = '';
-    groups.forEach(g => {
+    let html='';
+    groups.forEach(g=>{
       if (!g.items.length) return;
-      if (['alle','ravare','ferdig','utgatt'].includes(currentFilter)) html += `<div class="section-label">${g.label}</div>`;
-      html += '<div class="items-wrap">';
-      g.items.forEach(item => {
-        const d = dagerTil(item.date, item.months);
-        const s = status(item);
-        const dot = s === 'ok' ? 'dot-ok' : s === 'soon' ? 'dot-soon' : 'dot-expired';
-        html += `<div class="item ${s}">
+      html+=`<div class="section-label">${g.label}</div><div class="items-wrap">`;
+      g.items.forEach(item=>{
+        const d=dagerTil(item.date,item.months),s=itemStatus(item);
+        const dot=s==='ok'?'dot-ok':s==='soon'?'dot-soon':'dot-expired';
+        const cat=getCat(item.catId); const qty=item.qty||1;
+        html+=`<div class="item ${s}" onclick="openEditDrawer('${item.id}')">
           <div class="status-dot ${dot}"></div>
           <div class="item-body">
             <div class="item-name">${item.name}</div>
-            <div class="item-sub">${formatDager(d)} · ${item.addedBy || ''}</div>
+            <div class="item-sub">${formatDager(d)} · ${item.addedBy||''}</div>
           </div>
           <div class="item-right">
-            <span class="type-badge ${TYPE_BADGE[item.type]}">${TYPE_LABEL[item.type]}</span>
-            <button class="delete-btn" onclick="removeItem('${item.id}','${item.name.replace(/'/g,"\\'")}')">✕</button>
+            <span class="cat-badge" style="background:${cat.color}20;color:${cat.color}">${cat.name}</span>
+            <div class="qty-stepper" onclick="event.stopPropagation()">
+              <button class="qty-btn" onclick="adjustQty('${item.id}',-1,event)">−</button>
+              <span class="qty-num">${qty}</span>
+              <button class="qty-btn" onclick="adjustQty('${item.id}',1,event)">+</button>
+            </div>
           </div>
         </div>`;
       });
-      html += '</div>';
+      html+='</div>';
     });
-    container.innerHTML = html;
+    container.innerHTML=html;
   }
 
-  window.toggleDrawer = () => {
-    document.getElementById('drawer').classList.contains('open') ? closeDrawer() : openDrawer();
+  window.sendInvitasjon = async () => {
+    const email=document.getElementById('invite-email').value.trim().toLowerCase();
+    if (!email||!email.includes('@')) { showToast('Ugyldig e-post'); return; }
+    if (currentHusstand.members.includes(email)) { showToast('Allerede medlem'); return; }
+    await addDoc(collection(db,'invitasjoner'),{husstandId:currentHusstand.id,husstandNavn:currentHusstand.navn,fromEmail:currentUser.email,toEmail:email,status:'pending',createdAt:Date.now()});
+    document.getElementById('invite-email').value=''; showToast('Invitasjon sendt til '+email);
   };
-  window.openDrawer = () => {
-    document.getElementById('drawer').classList.add('open');
-    document.getElementById('overlay').classList.add('visible');
-    document.getElementById('fab').classList.add('open');
-    document.getElementById('inp-date').value = new Date().toISOString().split('T')[0];
-    document.getElementById('holdbarhet-box').className = 'holdbarhet-box';
-    setTimeout(() => document.getElementById('inp-name').focus(), 300);
+  window.fjernMedlem = async (email) => {
+    if (!confirm('Fjerne '+email+' fra husstanden?')) return;
+    await updateDoc(doc(db,'husstander',currentHusstand.id),{members:arrayRemove(email)}); showToast('Fjernet');
   };
-  window.closeDrawer = () => {
-    document.getElementById('drawer').classList.remove('open');
-    document.getElementById('overlay').classList.remove('visible');
-    document.getElementById('fab').classList.remove('open');
-    document.getElementById('inp-name').value = '';
-    document.getElementById('inp-months').value = 3;
-    document.getElementById('holdbarhet-box').className = 'holdbarhet-box';
+  window.forlateHusstand = async () => {
+    if (!confirm('Er du sikker?')) return;
+    await updateDoc(doc(db,'husstander',currentHusstand.id),{members:arrayRemove(currentUser.email)});
+    if(unsubItems)unsubItems(); if(unsubHusstand)unsubHusstand();
+    currentHusstand=null; closeSettings(); showScreen('setup-screen');
   };
-  window.openSettings = () => {
-    renderMembers();
-    document.getElementById('settings-drawer').classList.add('open');
-    document.getElementById('settings-overlay').classList.add('visible');
-  };
-  window.closeSettings = () => {
-    document.getElementById('settings-drawer').classList.remove('open');
-    document.getElementById('settings-overlay').classList.remove('visible');
-  };
+  function renderMembers() {
+    if (!currentHusstand) return;
+    const members=currentHusstand.members||[], names=currentHusstand.memberNames||{};
+    document.getElementById('members-list').innerHTML=members.map(email=>{
+      const name=names[email]||email, initials=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+      const isOwner=email===currentHusstand.owner, isMe=email===currentUser.email;
+      return `<div class="member-row"><div class="member-avatar">${initials}</div><div class="member-info"><div class="member-name">${name}${isMe?' (deg)':''}</div><div class="member-email">${email}</div></div><span class="member-tag">${isOwner?'Admin':'Medlem'}</span>${!isMe&&currentHusstand.owner===currentUser.email?`<button class="remove-member-btn" onclick="fjernMedlem('${email}')">✕</button>`:''}</div>`;
+    }).join('');
+  }
+  window.openSettings = () => { renderMembers(); renderCatManagement(); document.getElementById('settings-drawer').classList.add('open'); document.getElementById('settings-overlay').classList.add('visible'); };
+  window.closeSettings = () => { document.getElementById('settings-drawer').classList.remove('open'); document.getElementById('settings-overlay').classList.remove('visible'); };
 
   function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
+    const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2500);
   }
 </script>
+
 </body>
 </html>
