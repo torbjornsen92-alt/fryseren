@@ -225,7 +225,10 @@
 <div class="drawer-overlay" id="overlay" onclick="closeItemDrawer()"></div>
 <div class="drawer" id="item-drawer">
   <div class="drawer-handle"></div>
-  <div class="drawer-title" id="item-drawer-title">Legg til vare</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+    <div class="drawer-title" style="margin-bottom:0" id="item-drawer-title">Legg til vare</div>
+    <button onclick="closeItemDrawer()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text3);padding:4px;line-height:1;border-radius:8px">✕</button>
+  </div>
   <div class="field">
     <label>Navn på vare</label>
     <input type="text" id="inp-name" placeholder="F.eks. kyllingkjøttdeig" oninput="onNameInput()" />
@@ -263,7 +266,10 @@
 <div class="drawer-overlay" id="settings-overlay" onclick="closeSettings()"></div>
 <div class="drawer" id="settings-drawer">
   <div class="drawer-handle"></div>
-  <div class="drawer-title">Innstillinger</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+    <div class="drawer-title" style="margin-bottom:0">Innstillinger</div>
+    <button onclick="closeSettings()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text3);padding:4px;line-height:1;border-radius:8px">✕</button>
+  </div>
   <div class="settings-section">
     <div class="settings-label">Husstand</div>
     <div style="font-size:15px; font-weight:500;" id="settings-husstand-navn">–</div>
