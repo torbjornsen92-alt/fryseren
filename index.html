@@ -108,7 +108,7 @@
 
 .field { margin-bottom: 1rem; }
 .field label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 5px; font-weight: 500; }
-.field input, .field select { width: 100%; padding: 10px 12px; font-size: 14px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); outline: none; }
+.field input, .field select { width: 100%; padding: 10px 12px; font-size: 16px; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); outline: none; }
 .field input:focus, .field select:focus { border-color: var(--accent); }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
@@ -228,6 +228,9 @@
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
     <div class="drawer-title" style="margin-bottom:0" id="item-drawer-title">Legg til vare</div>
     <button onclick="closeItemDrawer()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text3);padding:4px;line-height:1;border-radius:8px">✕</button>
+  </div>
+  <div style="font-size:12px;color:var(--amber);background:var(--amber-bg);border-radius:8px;padding:8px 10px;margin-bottom:1rem;line-height:1.5;">
+    💡 <strong>Svakeste ledd:</strong> Holdbarhet på sammensatte retter styres av ingrediensen som holder kortest. Kylling + ris = 4 mnd.
   </div>
   <div class="field">
     <label>Navn på vare</label>
@@ -536,34 +539,85 @@
     await updateDoc(doc(db,'husstander',currentHusstand.id,'items',id),{qty:Math.max(1,(item.qty||1)+delta)});
   };
 
+  // ── HOLDBARHETSTABELL (kilder: Matprat.no, Matinfo.no) ──
+  const HOLDBARHET_TABELL = [
+    // Kylling og fugl
+    { ord: ['kyllingkjøttdeig','kylling kjøttdeig'], mnd: 2, info: 'Kyllingkjøttdeig holder 2 mnd' },
+    { ord: ['kylling','kalkun'], mnd: 4, info: 'Kylling (rå) holder 4 mnd' },
+    // Kjøtt
+    { ord: ['kjøttdeig','karbonadedeig'], mnd: 4, info: 'Kjøttdeig holder 4 mnd' },
+    { ord: ['medisterdeig','medister'], mnd: 3, info: 'Medisterdeig holder 3 mnd' },
+    { ord: ['svinekjøtt','svin','nakke','ribbe'], mnd: 3, info: 'Svinekjøtt med fett holder 3 mnd (magert: 6 mnd)' },
+    { ord: ['storfekjøtt','biff','okse','storfe'], mnd: 10, info: 'Storfekjøtt holder 10 mnd' },
+    { ord: ['lammekjøtt','lam','fårekjøtt'], mnd: 10, info: 'Lammekjøtt holder 10 mnd' },
+    { ord: ['vilt','reinsdyr','hjort','elg','rein'], mnd: 12, info: 'Viltkjøtt holder 12 mnd+' },
+    { ord: ['bacon','spekeskinke','spekemat','salami'], mnd: 2, info: 'Bacon/spekemat holder 2 mnd (salt og fett gir kort holdbarhet)' },
+    { ord: ['pølse','pølser'], mnd: 3, info: 'Pølser holder 3 mnd' },
+    { ord: ['spekemat'], mnd: 6, info: 'Spekemat holder 6 mnd' },
+    // Fisk
+    { ord: ['laks','makrell','sild','ål'], mnd: 3, info: 'Fet fisk holder 3 mnd' },
+    { ord: ['uer','kveite','røye','steinbit'], mnd: 3, info: 'Halvfet fisk holder 3 mnd' },
+    { ord: ['torsk','sei','hyse','kolje','hvitting'], mnd: 6, info: 'Mager fisk holder 6 mnd' },
+    { ord: ['reker','skalldyr','krabbe','hummer'], mnd: 4, info: 'Reker/skalldyr holder 4 mnd' },
+    { ord: ['fiskekake','fiskepinne','fiskegrateng','fiskemat'], mnd: 3, info: 'Fiskemat holder 3 mnd' },
+    // Ferdigmiddager
+    { ord: ['suppe','grønnsakssuppe','tomatsuppe','gulrotsuppe','blomkålsuppe'], mnd: 5, info: 'Suppe holder 5 mnd' },
+    { ord: ['gryte','lapskaus','fårikål','viltgryte'], mnd: 5, info: 'Gryte holder 5 mnd' },
+    { ord: ['kraft','buljong'], mnd: 5, info: 'Kraft/buljong holder 5 mnd' },
+    { ord: ['ragu','kjøttsaus','bolognese'], mnd: 4, info: 'Ragu/kjøttsaus holder 4 mnd (inneholder kjøtt)' },
+    { ord: ['dal','linser','bønner','kikert'], mnd: 7, info: 'Linse-/bønnerett holder 7 mnd' },
+    { ord: ['indisk','curry','kokos'], mnd: 4, info: 'Indisk/kokosgryte holder 4 mnd' },
+    { ord: ['vårruller','vårull'], mnd: 3, info: 'Vårruller holder 3 mnd' },
+    { ord: ['pizza'], mnd: 3, info: 'Hjemmelaget pizza holder 3 mnd' },
+    { ord: ['lasagne','pastarett'], mnd: 4, info: 'Lasagne/pastarett holder 4 mnd' },
+    // Bakst
+    { ord: ['brød','rundstykker','baguette','focaccia'], mnd: 6, info: 'Brød holder 6 mnd' },
+    { ord: ['boller','kanelboller','horn'], mnd: 6, info: 'Boller holder 6 mnd' },
+    { ord: ['kake','muffins','brownie'], mnd: 4, info: 'Kake holder 4 mnd' },
+    { ord: ['krem','kremkake'], mnd: 1, info: 'Kaker med krem holder kun 1 mnd' },
+    // Frukt, bær, grønt
+    { ord: ['bær','jordbær','bringebær','blåbær','solbær'], mnd: 12, info: 'Bær holder 12 mnd' },
+    { ord: ['frukt','eple','pære','plomme'], mnd: 10, info: 'Fryst frukt holder 10 mnd' },
+    { ord: ['grønnsaker','brokkoli','blomkål','erter','mais','paprika'], mnd: 10, info: 'Blancherte grønnsaker holder 10 mnd' },
+    { ord: ['sopp'], mnd: 12, info: 'Sopp holder 12 mnd' },
+    // Meieri og annet
+    { ord: ['syltetøy','marmelade','jam'], mnd: 12, info: 'Hjemmelaget syltetøy holder 12 mnd' },
+    { ord: ['smør','margarin'], mnd: 7, info: 'Smør/margarin holder 7 mnd' },
+    { ord: ['ost'], mnd: 3, info: 'Ost holder 3 mnd (egner seg best til varmretter etter frysing)' },
+    { ord: ['melk','fløte'], mnd: 4, info: 'Melk/fløte holder 4 mnd' },
+  ];
+
+  function slaOppHoldbarhet(navn) {
+    const n = navn.toLowerCase().trim();
+    for (const rad of HOLDBARHET_TABELL) {
+      if (rad.ord.some(o => n.includes(o))) return rad;
+    }
+    return null;
+  }
+
   window.onNameInput = () => {
     clearTimeout(nameTimer);
     document.getElementById('holdbarhet-box').className='holdbarhet-box';
     const name=document.getElementById('inp-name').value.trim();
-    if (name.length<3||!ANTHROPIC_API_KEY) return;
-    nameTimer=setTimeout(()=>lookupHoldbarhet(),900);
+    if (name.length<2) return;
+    nameTimer=setTimeout(()=>lookupHoldbarhet(),600);
   };
 
-  window.lookupHoldbarhet = async () => {
+  window.lookupHoldbarhet = () => {
     const name=document.getElementById('inp-name').value.trim();
-    if (!name||!ANTHROPIC_API_KEY) return;
+    if (!name) return;
     const box=document.getElementById('holdbarhet-box');
-    box.className='holdbarhet-box loading visible'; box.textContent='Slår opp holdbarhet...';
-    try {
-      const res=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','x-api-key':ANTHROPIC_API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:150,
-          system:'Du er matekspert. Svar KUN med JSON: {"måneder": tall, "forklaring": "kort norsk setning"}. Ingen markdown.',
-          messages:[{role:'user',content:'Holdbarhet i hjemmefryser (-18°C) for: "'+name+'"'}]})
-      });
-      const data=await res.json();
-      const parsed=JSON.parse(data.content[0].text);
-      const mnd=Math.round(parsed.måneder);
-      document.getElementById('inp-months').value=mnd;
+    const treff = slaOppHoldbarhet(name);
+    if (treff) {
+      document.getElementById('inp-months').value=treff.mnd;
       box.className='holdbarhet-box visible';
-      box.textContent=parsed.forklaring+' → '+mnd+' mnd anbefalt';
-    } catch(e) { box.className='holdbarhet-box error visible'; box.textContent='Kunne ikke slå opp – sett måneder manuelt.'; }
+      box.textContent='💡 ' + treff.info;
+    } else {
+      box.className='holdbarhet-box visible';
+      box.style.background='var(--surface2)';
+      box.style.color='var(--text2)';
+      box.textContent='Ingen treff – sett holdbarhet manuelt. Husk «svakeste ledd»-regelen for sammensatte retter.';
+    }
   };
 
   function dagerTil(dateStr,months) { const ut=new Date(dateStr); ut.setMonth(ut.getMonth()+months); return Math.round((ut-new Date())/86400000); }
