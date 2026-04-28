@@ -157,6 +157,18 @@
 
 .toast { position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--text); color: var(--bg); font-size: 13px; padding: 8px 18px; border-radius: 20px; opacity: 0; transition: all 0.2s; pointer-events: none; z-index: 500; white-space: nowrap; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Holdbarhetstabell modal */
+.tabell-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 400; }
+.tabell-overlay.visible { opacity: 1; pointer-events: all; }
+.tabell-modal { position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; background: var(--surface); border-radius: 22px 22px 0 0; padding: 1.5rem 1.25rem 2.5rem; transform: translateY(100%); transition: transform 0.28s cubic-bezier(0.32,0.72,0,1); z-index: 410; max-height: 85vh; overflow-y: auto; }
+.tabell-modal.open { transform: translateY(0); }
+.tabell-group { margin-bottom: 1.25rem; }
+.tabell-group-title { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text3); margin-bottom: 0.4rem; }
+.tabell-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
+.tabell-row:last-child { border-bottom: none; }
+.tabell-mnd { font-weight: 500; color: var(--accent); white-space: nowrap; margin-left: 1rem; }
+.tabell-link { font-size: 11px; color: var(--blue); text-decoration: underline; cursor: pointer; margin-top: 4px; display: inline-block; }
 ```
 
   </style>
@@ -259,7 +271,7 @@
       <label>Holdbarhet (måneder)</label>
       <input type="number" id="inp-months" value="3" min="1" max="24" />
     </div>
-    <button class="lookup-btn" onclick="lookupHoldbarhet()">Slå opp</button>
+    <button class="lookup-btn" onclick="lookupHoldbarhet()">Spør</button>
   </div>
   <div class="holdbarhet-box" id="holdbarhet-box"></div>
   <button class="save-btn" id="save-btn" onclick="saveItem()">Legg til i fryseren</button>
@@ -299,6 +311,75 @@
     <button class="danger-btn" onclick="signOut()">Logg ut</button>
     <button class="danger-btn" onclick="forlateHusstand()">Forlat husstand</button>
   </div>
+</div>
+
+<div class="tabell-overlay" id="tabell-overlay" onclick="closeTabell()"></div>
+<div class="tabell-modal" id="tabell-modal">
+  <div class="drawer-handle"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+    <div class="drawer-title" style="margin-bottom:0">Holdbarhet i fryseren</div>
+    <button onclick="closeTabell()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text3);padding:4px;line-height:1;border-radius:8px">✕</button>
+  </div>
+  <div style="font-size:12px;color:var(--amber);background:var(--amber-bg);border-radius:8px;padding:8px 10px;margin-bottom:1.25rem;line-height:1.5;">
+    💡 <strong>Svakeste ledd:</strong> Holdbarhet på sammensatte retter styres av ingrediensen som holder kortest. Kylling + ris = 4 mnd.
+  </div>
+  <div class="tabell-group">
+    <div class="tabell-group-title">Kjøtt og fugl</div>
+    <div class="tabell-row"><span>Kylling (rå)</span><span class="tabell-mnd">4 mnd</span></div>
+    <div class="tabell-row"><span>Kyllingkjøttdeig</span><span class="tabell-mnd">2 mnd</span></div>
+    <div class="tabell-row"><span>Kjøttdeig / karbonadedeig</span><span class="tabell-mnd">4 mnd</span></div>
+    <div class="tabell-row"><span>Svinekjøtt (magert)</span><span class="tabell-mnd">6 mnd</span></div>
+    <div class="tabell-row"><span>Svinekjøtt (med fett)</span><span class="tabell-mnd">3 mnd</span></div>
+    <div class="tabell-row"><span>Storfekjøtt</span><span class="tabell-mnd">10 mnd</span></div>
+    <div class="tabell-row"><span>Lammekjøtt</span><span class="tabell-mnd">10 mnd</span></div>
+    <div class="tabell-row"><span>Viltkjøtt / reinsdyr</span><span class="tabell-mnd">12 mnd</span></div>
+    <div class="tabell-row"><span>Pølser</span><span class="tabell-mnd">3 mnd</span></div>
+    <div class="tabell-row"><span>Spekemat</span><span class="tabell-mnd">6 mnd</span></div>
+    <div class="tabell-row"><span>Bacon / saltet kjøtt</span><span class="tabell-mnd">2 mnd</span></div>
+  </div>
+  <div class="tabell-group">
+    <div class="tabell-group-title">Fisk og sjømat</div>
+    <div class="tabell-row"><span>Laks / fet fisk</span><span class="tabell-mnd">3 mnd</span></div>
+    <div class="tabell-row"><span>Halvfet fisk (uer, kveite, røye)</span><span class="tabell-mnd">3 mnd</span></div>
+    <div class="tabell-row"><span>Torsk / mager fisk</span><span class="tabell-mnd">6 mnd</span></div>
+    <div class="tabell-row"><span>Reker / skalldyr</span><span class="tabell-mnd">4 mnd</span></div>
+    <div class="tabell-row"><span>Fiskekaker / fiskegrateng</span><span class="tabell-mnd">3 mnd</span></div>
+  </div>
+  <div class="tabell-group">
+    <div class="tabell-group-title">Ferdigmiddager og retter</div>
+    <div class="tabell-row"><span>Kjøttretter (magre)</span><span class="tabell-mnd">7 mnd</span></div>
+    <div class="tabell-row"><span>Kjøttretter (fete)</span><span class="tabell-mnd">4 mnd</span></div>
+    <div class="tabell-row"><span>Supper og gryter</span><span class="tabell-mnd">5 mnd</span></div>
+    <div class="tabell-row"><span>Kraft og buljong</span><span class="tabell-mnd">5 mnd</span></div>
+    <div class="tabell-row"><span>Ragu / kjøttsaus</span><span class="tabell-mnd">4 mnd</span></div>
+    <div class="tabell-row"><span>Dal / linse- og bønneretter</span><span class="tabell-mnd">7 mnd</span></div>
+    <div class="tabell-row"><span>Indisk / kokosgryte</span><span class="tabell-mnd">4 mnd</span></div>
+    <div class="tabell-row"><span>Pizza (hjemmelaget)</span><span class="tabell-mnd">3 mnd</span></div>
+    <div class="tabell-row"><span>Lasagne / pastarett</span><span class="tabell-mnd">4 mnd</span></div>
+    <div class="tabell-row"><span>Vårruller</span><span class="tabell-mnd">3 mnd</span></div>
+  </div>
+  <div class="tabell-group">
+    <div class="tabell-group-title">Bakst og brød</div>
+    <div class="tabell-row"><span>Brød og rundstykker</span><span class="tabell-mnd">6 mnd</span></div>
+    <div class="tabell-row"><span>Boller og horn</span><span class="tabell-mnd">6 mnd</span></div>
+    <div class="tabell-row"><span>Kaker og muffins</span><span class="tabell-mnd">4 mnd</span></div>
+    <div class="tabell-row"><span>Kaker med krem / glasur</span><span class="tabell-mnd">1 mnd</span></div>
+  </div>
+  <div class="tabell-group">
+    <div class="tabell-group-title">Frukt, bær og grønnsaker</div>
+    <div class="tabell-row"><span>Bær (alle typer)</span><span class="tabell-mnd">12 mnd</span></div>
+    <div class="tabell-row"><span>Frukt (fryst)</span><span class="tabell-mnd">10 mnd</span></div>
+    <div class="tabell-row"><span>Grønnsaker (blanchert)</span><span class="tabell-mnd">10 mnd</span></div>
+    <div class="tabell-row"><span>Sopp</span><span class="tabell-mnd">12 mnd</span></div>
+  </div>
+  <div class="tabell-group">
+    <div class="tabell-group-title">Meieri og annet</div>
+    <div class="tabell-row"><span>Syltetøy (hjemmelaget)</span><span class="tabell-mnd">12 mnd</span></div>
+    <div class="tabell-row"><span>Smør / margarin</span><span class="tabell-mnd">7 mnd</span></div>
+    <div class="tabell-row"><span>Ost (fet, revet)</span><span class="tabell-mnd">3 mnd</span></div>
+    <div class="tabell-row"><span>Melk / fløte</span><span class="tabell-mnd">4 mnd</span></div>
+  </div>
+  <div style="font-size:11px;color:var(--text3);margin-top:0.5rem;">Kilder: Matprat.no, Matinfo.no</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -611,13 +692,22 @@
     if (treff) {
       document.getElementById('inp-months').value=treff.mnd;
       box.className='holdbarhet-box visible';
-      box.textContent='💡 ' + treff.info;
+      box.innerHTML='💡 ' + treff.info + '<br><span class="tabell-link" onclick="openTabell()">Se full holdbarhetstabell →</span>';
     } else {
       box.className='holdbarhet-box visible';
       box.style.background='var(--surface2)';
       box.style.color='var(--text2)';
-      box.textContent='Ingen treff – sett holdbarhet manuelt. Husk «svakeste ledd»-regelen for sammensatte retter.';
+      box.innerHTML='Ingen treff – sett holdbarhet manuelt.<br><span class="tabell-link" onclick="openTabell()" style="color:var(--blue)">Se full holdbarhetstabell →</span>';
     }
+  };
+
+  window.openTabell = () => {
+    document.getElementById('tabell-modal').classList.add('open');
+    document.getElementById('tabell-overlay').classList.add('visible');
+  };
+  window.closeTabell = () => {
+    document.getElementById('tabell-modal').classList.remove('open');
+    document.getElementById('tabell-overlay').classList.remove('visible');
   };
 
   function dagerTil(dateStr,months) { const ut=new Date(dateStr); ut.setMonth(ut.getMonth()+months); return Math.round((ut-new Date())/86400000); }
